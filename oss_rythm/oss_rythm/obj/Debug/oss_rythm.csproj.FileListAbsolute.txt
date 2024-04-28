@@ -1,0 +1,13 @@
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe.config
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\bin\Debug\oss_rythm.pdb
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.AssemblyReference.cache
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Form1.resources
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Properties.Resources.resources
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.GenerateResource.cache
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\Interop.WMPLib.dll
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.ResolveComReference.cache
+C:\Users\정승현\Desktop\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pause.resources
