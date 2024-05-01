@@ -15,12 +15,16 @@ namespace oss_rythm
     {
         public event EventHandler Changed;
         private WindowsMediaPlayer _media;
-        public pause(WindowsMediaPlayer media)
+        Form grandParent;
+        Form parent;
+        public pause(WindowsMediaPlayer media,Form parent, Form grandParent)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen; 
             this.FormBorderStyle = FormBorderStyle.None;
             _media = media;
+            this.parent = parent;
+            this.grandParent = grandParent;
             volume.Value = _media.settings.volume;
         }
 
@@ -32,7 +36,9 @@ namespace oss_rythm
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-
+            parent.Close();
+            this.Close();
+            grandParent.Visible = true;
         }
         private void Volume_Scroll(object sender, EventArgs e)
         {
@@ -45,12 +51,6 @@ namespace oss_rythm
                 _media.settings.volume = volume.Value;
             }
 
-        }
-        private int VolumeToTrackbar(int Min, int Max, int Per)
-        {
-            double iRange = Max - Min;
-            double iTarget = iRange * Per / 100;
-            return (int)(iTarget + Min);
         }
     }
 }

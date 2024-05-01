@@ -16,31 +16,27 @@ namespace oss_rythm
     {
         pause pause;
         WindowsMediaPlayer _media;
-        public Form1()
+        Form parent;
+        public Form1(WindowsMediaPlayer media,Form parent)
         {
             InitializeComponent();
-            InitializeOpenFileDialog(); 
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.FormBorderStyle = FormBorderStyle.None;
+            _media = media;
+            this.parent = parent;
         }
 
-        private void InitializeOpenFileDialog()
-        {
-            ofd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            ofd.Filter = "MP3 (*.mp3)|*.mp3|모든파일 (*.*)|*.*";
-            ofd.FileName = "";
-        }
 
         private void Music_Play(object sender,EventArgs e)
         {
             _media.controls.play();
             btnStop.Enabled = true;
             btnStop.Visible = true;
-            btnLoad.Enabled = true;
-            btnLoad.Visible = true;
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            pause = new pause(_media);
+            pause = new pause(_media,this,parent);
             pause.TopLevel = true;
             pause.MdiParent = this;
             pause.Changed += new EventHandler(Music_Play);
@@ -48,8 +44,6 @@ namespace oss_rythm
             _media.controls.pause();
             btnStop.Enabled = false;
             btnStop.Visible = false;
-            btnLoad.Enabled = false;
-            btnLoad.Visible = false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -57,18 +51,5 @@ namespace oss_rythm
             btnStop.BackgroundImageLayout = ImageLayout.Stretch;
         }
 
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
-            if(ofd.ShowDialog() == DialogResult.OK)
-            {
-                if(_media == null)
-                {
-                    _media = new WindowsMediaPlayer();
-                }
-                _media.URL = ofd.FileName;
-                _media.controls.play();
-
-            }
-        }
     }
 }

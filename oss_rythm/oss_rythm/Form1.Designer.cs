@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btnStop = new System.Windows.Forms.Button();
-            this.btnLoad = new System.Windows.Forms.Button();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
@@ -46,22 +45,13 @@
             // 
             this.btnStop.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnStop.BackgroundImage = global::oss_rythm.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(733, 22);
+            this.btnStop.Location = new System.Drawing.Point(1047, 33);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(28, 24);
+            this.btnStop.Size = new System.Drawing.Size(40, 36);
             this.btnStop.TabIndex = 0;
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
-            // 
-            // btnLoad
-            // 
-            this.btnLoad.Location = new System.Drawing.Point(121, 46);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnLoad.TabIndex = 2;
-            this.btnLoad.Text = "불러오기";
-            this.btnLoad.UseVisualStyleBackColor = true;
-            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
             // ofd
             // 
@@ -69,12 +59,12 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.btnLoad);
+            this.ClientSize = new System.Drawing.Size(1143, 675);
             this.Controls.Add(this.btnStop);
             this.IsMdiContainer = true;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -86,7 +76,6 @@
 
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.OpenFileDialog ofd;
     }
 }
