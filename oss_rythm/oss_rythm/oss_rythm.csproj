@@ -58,12 +58,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Option.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Option.Designer.cs">
-      <DependentUpon>Option.cs</DependentUpon>
-    </Compile>
     <Compile Include="pause.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,9 +77,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Option.resx">
-      <DependentUpon>Option.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="pause.resx">
       <DependentUpon>pause.cs</DependentUpon>

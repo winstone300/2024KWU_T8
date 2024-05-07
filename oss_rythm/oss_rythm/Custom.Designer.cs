@@ -37,6 +37,9 @@
             this.lblTitleInfo = new System.Windows.Forms.Label();
             this.labelScore = new System.Windows.Forms.Label();
             this.labelTitle = new System.Windows.Forms.Label();
+            this.btnHard = new System.Windows.Forms.Button();
+            this.btnNormal = new System.Windows.Forms.Button();
+            this.btnEasy = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -131,11 +134,44 @@
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Title ";
             // 
+            // btnHard
+            // 
+            this.btnHard.Font = new System.Drawing.Font("Showcard Gothic", 16F);
+            this.btnHard.Location = new System.Drawing.Point(632, 261);
+            this.btnHard.Name = "btnHard";
+            this.btnHard.Size = new System.Drawing.Size(271, 81);
+            this.btnHard.TabIndex = 11;
+            this.btnHard.Text = "HARD";
+            this.btnHard.UseVisualStyleBackColor = true;
+            // 
+            // btnNormal
+            // 
+            this.btnNormal.Font = new System.Drawing.Font("Showcard Gothic", 16F);
+            this.btnNormal.Location = new System.Drawing.Point(345, 261);
+            this.btnNormal.Name = "btnNormal";
+            this.btnNormal.Size = new System.Drawing.Size(271, 81);
+            this.btnNormal.TabIndex = 10;
+            this.btnNormal.Text = "NORMAL";
+            this.btnNormal.UseVisualStyleBackColor = true;
+            // 
+            // btnEasy
+            // 
+            this.btnEasy.Font = new System.Drawing.Font("Showcard Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEasy.Location = new System.Drawing.Point(42, 261);
+            this.btnEasy.Name = "btnEasy";
+            this.btnEasy.Size = new System.Drawing.Size(271, 81);
+            this.btnEasy.TabIndex = 9;
+            this.btnEasy.Text = "EASY";
+            this.btnEasy.UseVisualStyleBackColor = true;
+            // 
             // Custom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1396, 690);
+            this.Controls.Add(this.btnHard);
+            this.Controls.Add(this.btnNormal);
+            this.Controls.Add(this.btnEasy);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnPlay);
@@ -159,5 +195,8 @@
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Label lblScoreInfo;
         private System.Windows.Forms.Label lblTitleInfo;
+        private System.Windows.Forms.Button btnHard;
+        private System.Windows.Forms.Button btnNormal;
+        private System.Windows.Forms.Button btnEasy;
     }
 }
