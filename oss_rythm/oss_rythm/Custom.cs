@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WMPLib;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace oss_rythm
 {
@@ -45,7 +47,25 @@ namespace oss_rythm
                 _media.URL = ofd.FileName;
                 _media.controls.stop();
                 string fileName = Path.GetFileName(ofd.FileName);
-                lblTitleInfo.Text = fileName;
+                string pattern = @"^(.+)\.[^.]+$";
+                string RefileName = Regex.Replace(fileName, pattern, "$1");
+                lblTitleInfo.Text = RefileName;
+                string url = "https://songdata.io/search?query=" + RefileName ;
+                webBrowser1.Navigate(url);
+            }
+        }
+
+        //bpm 태그 추출
+        private void ExtractBpmValues()
+        {
+            HtmlElementCollection elements = webBrowser1.Document.GetElementsByTagName("td");
+            foreach (HtmlElement element in elements)
+            {
+                if (element.GetAttribute("className") == "table_bpm")
+                {
+                    lblBpmInfo.Text = element.InnerText.Trim();
+                    return;
+                }
             }
         }
 
@@ -66,6 +86,12 @@ namespace oss_rythm
         {
             parent.Visible = true;
             this.Close();
+        }
+
+        //웹브라우저 로딩 완료시 실행
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            ExtractBpmValues();
         }
     }
 }

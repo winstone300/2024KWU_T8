@@ -16,7 +16,6 @@ namespace oss_rythm
 
         private WindowsMediaPlayer _media;
         Custom custom;
-        Option option;
         public Start()
         {
             InitializeComponent();
@@ -28,12 +27,6 @@ namespace oss_rythm
         {
             custom = new Custom(this);
             custom.Show();
-            this.Visible = false;
-        }
-        private void btnOption_Click(object sender, EventArgs e)
-        {
-            option = new Option(this);
-            option.Show();
             this.Visible = false;
         }
 
