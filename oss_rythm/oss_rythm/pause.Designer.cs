@@ -88,6 +88,7 @@
             this.Controls.Add(this.label1);
             this.Name = "pause";
             this.Text = "pause";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.volume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

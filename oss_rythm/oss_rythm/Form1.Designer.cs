@@ -33,6 +33,11 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btnStop = new System.Windows.Forms.Button();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
+            this.bar1 = new System.Windows.Forms.Panel();
+            this.bar2 = new System.Windows.Forms.Panel();
+            this.bar3 = new System.Windows.Forms.Panel();
+            this.bar4 = new System.Windows.Forms.Panel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // imageList1
@@ -45,10 +50,9 @@
             // 
             this.btnStop.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnStop.BackgroundImage = global::oss_rythm.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(1047, 33);
-            this.btnStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnStop.Location = new System.Drawing.Point(733, 22);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(40, 36);
+            this.btnStop.Size = new System.Drawing.Size(28, 24);
             this.btnStop.TabIndex = 0;
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
@@ -57,14 +61,45 @@
             // 
             this.ofd.FileName = "openFileDialog1";
             // 
+            // bar1
+            // 
+            this.bar1.Location = new System.Drawing.Point(12, 22);
+            this.bar1.Name = "bar1";
+            this.bar1.Size = new System.Drawing.Size(152, 492);
+            this.bar1.TabIndex = 2;
+            // 
+            // bar2
+            // 
+            this.bar2.Location = new System.Drawing.Point(170, 22);
+            this.bar2.Name = "bar2";
+            this.bar2.Size = new System.Drawing.Size(152, 492);
+            this.bar2.TabIndex = 6;
+            // 
+            // bar3
+            // 
+            this.bar3.Location = new System.Drawing.Point(328, 22);
+            this.bar3.Name = "bar3";
+            this.bar3.Size = new System.Drawing.Size(152, 492);
+            this.bar3.TabIndex = 7;
+            // 
+            // bar4
+            // 
+            this.bar4.Location = new System.Drawing.Point(486, 22);
+            this.bar4.Name = "bar4";
+            this.bar4.Size = new System.Drawing.Size(152, 492);
+            this.bar4.TabIndex = 7;
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1143, 675);
+            this.ClientSize = new System.Drawing.Size(933, 661);
+            this.Controls.Add(this.bar4);
+            this.Controls.Add(this.bar3);
+            this.Controls.Add(this.bar2);
+            this.Controls.Add(this.bar1);
             this.Controls.Add(this.btnStop);
             this.IsMdiContainer = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -77,6 +112,11 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.OpenFileDialog ofd;
+        private System.Windows.Forms.Panel bar1;
+        private System.Windows.Forms.Panel bar2;
+        private System.Windows.Forms.Panel bar3;
+        private System.Windows.Forms.Panel bar4;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
