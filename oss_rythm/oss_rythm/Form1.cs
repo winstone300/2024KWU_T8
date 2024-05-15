@@ -45,6 +45,8 @@ namespace oss_rythm
             skipNext[bar2] =0;
             skipNext[bar3] = 0;
             skipNext[bar4] = 0;
+
+            this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키보드 입력 이벤트 핸들러 추가
         }
         // 게임 초기화 메서드
         private void InitializeGame()
@@ -157,6 +159,62 @@ namespace oss_rythm
             PlayMusic();
             
         }
+       private void Form1_KeyDown(object sender, KeyEventArgs e)
+       {
+           long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
+           Panel targetBar = null;
 
+           switch (e.KeyCode)
+           {
+               case Keys.Q:
+                   targetBar = bar1;
+                   break;
+               case Keys.W:
+                   targetBar = bar2;
+                   break;
+               case Keys.E:
+                   targetBar = bar3;
+                   break;
+               case Keys.R:
+                   targetBar = bar4;
+                   break;
+               default:
+                   return;
+           }
+
+
+           foreach (Panel note in notes.ToList())
+           {
+               if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
+               {
+                   double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
+                   double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+
+
+                   if (difference < 100)
+                   {
+                       perfectCount++;
+                       resultLabel.Text = "Perfect!";
+                       resultLabel.ForeColor = Color.Green;
+                   }
+                   else if (difference < 200)
+                   {
+                       goodCount++;
+                       resultLabel.Text = "Good!";
+                       resultLabel.ForeColor = Color.Blue;
+                   }
+                   else
+                   {
+                       badCount++;
+                       resultLabel.Text = "Bad!";
+                       resultLabel.ForeColor = Color.Red;
+                   }
+
+                   notes.Remove(note);
+                   note.Dispose();
+                   break;
+               }
+           }
+       }
     }
 }
