@@ -38,6 +38,7 @@
             this.bar3 = new System.Windows.Forms.Panel();
             this.bar4 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.resultLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // imageList1
@@ -89,6 +90,16 @@
             this.bar4.Size = new System.Drawing.Size(152, 492);
             this.bar4.TabIndex = 7;
             // 
+            // resultLabel
+            // 
+            this.resultLabel.AutoSize = true;
+            this.resultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultLabel.Location = new System.Drawing.Point(441, 799);
+            this.resultLabel.Name = "resultLabel";
+            this.resultLabel.Size = new System.Drawing.Size(63, 29);
+            this.resultLabel.TabIndex = 9;
+            this.resultLabel.Text = "Wait";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -117,6 +128,7 @@
         private System.Windows.Forms.Panel bar3;
         private System.Windows.Forms.Panel bar4;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label resultLabel;
     }
 }
 
