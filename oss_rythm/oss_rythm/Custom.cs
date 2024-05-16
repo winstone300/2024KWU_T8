@@ -18,7 +18,7 @@ namespace oss_rythm
     public partial class Custom : Form
     {
         private WindowsMediaPlayer _media;
-        Dictionary<string, int> setting;
+        int progressPercentage;
         Form1 form1;
         Form parent;
         public Custom(Form parent)
@@ -28,6 +28,8 @@ namespace oss_rythm
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.None;
             this.parent = parent;
+            progressBar1.Value = 0;
+            webBrowser1.ProgressChanged += new WebBrowserProgressChangedEventHandler(webBrowser1_ProgressChanged);
         }
         private void InitializeOpenFileDialog()
         {
@@ -38,6 +40,7 @@ namespace oss_rythm
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
+            BpmLoding.Text = "Loading ...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (_media == null)
@@ -76,6 +79,11 @@ namespace oss_rythm
                 MessageBox.Show("음악을 선택해 주세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (progressPercentage == 0)
+            {
+                MessageBox.Show("BPM 추출 중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             form1 = new Form1(_media,parent);
             form1.Show();
             _media.controls.play();
@@ -92,6 +100,19 @@ namespace oss_rythm
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             ExtractBpmValues();
+        }
+
+        private void webBrowser1_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
+        {
+            if (e.MaximumProgress > 0 && e.CurrentProgress > 0)
+            {
+                progressPercentage = (int)(e.CurrentProgress * 100 / e.MaximumProgress);
+                progressBar1.Value = progressPercentage;
+                if (progressPercentage == 100)
+                {
+                    BpmLoding.Text = "BPM 추출 완료";
+                }
+            }
         }
     }
 }
