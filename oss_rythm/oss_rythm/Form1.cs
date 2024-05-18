@@ -20,7 +20,7 @@ namespace oss_rythm
         // 게임 타이머 추가
         private Timer gameTimer = new Timer();
         private List<Panel> notes = new List<Panel>(); // 활성 노트를 추적하는 리스트
-        private Label comboLabel; // 콤보를 표시할 레이블 추가
+        
         private int combo = 0; // 콤보 초기값
         private int perfectCount = 0; // Perfect 카운트
         private int goodCount = 0; // Good 카운트
@@ -36,6 +36,7 @@ namespace oss_rythm
         {
             InitializeComponent();
             InitializeGame(); // 게임 초기화 메서드 호출
+            InitializeUI(); // UI 초기화 메서드 호출
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.None;
             _media = media;
@@ -47,6 +48,7 @@ namespace oss_rythm
             skipNext[bar4] = 0;
 
             this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키보드 입력 이벤트 핸들러 추가
+            this.KeyUp += new KeyEventHandler(Form1_KeyUp); // 키보드 뗌 이벤트 핸들러 추가
         }
         // 게임 초기화 메서드
         private void InitializeGame()
@@ -55,6 +57,32 @@ namespace oss_rythm
             gameTimer.Tick += GameTimer_Tick; // 타이머 틱 이벤트 핸들러 추가
             targetTime = (60.0 / bpm) * 1000; // 목표 시간 계산 (밀리초 단위)
         }
+
+        private void InitializeUI()
+        {
+
+
+
+            btnQ.MouseDown += Btn_MouseDown;
+            btnW.MouseDown += Btn_MouseDown;
+            btnE.MouseDown += Btn_MouseDown;
+            btnR.MouseDown += Btn_MouseDown;
+            btnQ.MouseUp += Btn_MouseUp;
+            btnW.MouseUp += Btn_MouseUp;
+            btnE.MouseUp += Btn_MouseUp;
+            btnR.MouseUp += Btn_MouseUp;
+            this.Controls.Add(btnQ);
+            this.Controls.Add(btnW);
+            this.Controls.Add(btnE);
+            this.Controls.Add(btnR);
+
+            // 레이블 초기화
+            comboLabel.Text = "Combo: 0"; 
+            rLabel.Text = "";
+            this.Controls.Add(comboLabel);
+            this.Controls.Add(rLabel);
+        }
+
         // 게임 타이머 틱 이벤트 핸들러
         private void GameTimer_Tick(object sender, EventArgs e)
         {
@@ -159,62 +187,161 @@ namespace oss_rythm
             PlayMusic();
             
         }
-       private void Form1_KeyDown(object sender, KeyEventArgs e)
-       {
-           long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
-           Panel targetBar = null;
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            HandleKeyPress(e.KeyCode, true);
+        }
 
-           switch (e.KeyCode)
-           {
-               case Keys.Q:
-                   targetBar = bar1;
-                   break;
-               case Keys.W:
-                   targetBar = bar2;
-                   break;
-               case Keys.E:
-                   targetBar = bar3;
-                   break;
-               case Keys.R:
-                   targetBar = bar4;
-                   break;
-               default:
-                   return;
-           }
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            HandleKeyPress(e.KeyCode, false);
+        }
 
+        private void Btn_MouseDown(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.BackColor = Color.Green;
+            Keys key = Keys.None;
 
-           foreach (Panel note in notes.ToList())
-           {
-               if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
-               {
-                   double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
-                   double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+            if (btn == btnQ) key = Keys.Q;
+            else if (btn == btnW) key = Keys.W;
+            else if (btn == btnE) key = Keys.E;
+            else if (btn == btnR) key = Keys.R;
 
+            HandleKeyPress(key, true);
+        }
+        private void Btn_MouseUp(object sender, MouseEventArgs e)
+        {
+            Button btn = sender as Button;
+            btn.BackColor = Color.White;
+            Keys key = Keys.None;
 
-                   if (difference < 100)
-                   {
-                       perfectCount++;
-                       resultLabel.Text = "Perfect!";
-                       resultLabel.ForeColor = Color.Green;
-                   }
-                   else if (difference < 200)
-                   {
-                       goodCount++;
-                       resultLabel.Text = "Good!";
-                       resultLabel.ForeColor = Color.Blue;
-                   }
-                   else
-                   {
-                       badCount++;
-                       resultLabel.Text = "Bad!";
-                       resultLabel.ForeColor = Color.Red;
-                   }
+            if (btn == btnQ) key = Keys.Q;
+            else if (btn == btnW) key = Keys.W;
+            else if (btn == btnE) key = Keys.E;
+            else if (btn == btnR) key = Keys.R;
 
-                   notes.Remove(note);
-                   note.Dispose();
-                   break;
-               }
-           }
-       }
+            HandleKeyPress(key, false);
+        }
+        private void HandleKeyPress(Keys key, bool isPressed)
+        {
+            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
+            Panel targetBar = null;
+            int blockType = 0;
+
+            switch (key)
+            {
+                case Keys.Q:
+                    targetBar = bar1;
+                    break;
+                case Keys.W:
+                    targetBar = bar2;
+                    break;
+                case Keys.E:
+                    targetBar = bar3;
+                    break;
+                case Keys.R:
+                    targetBar = bar4;
+                    break;
+                default:
+                    return;
+            }
+
+            if (isPressed)
+            {
+                foreach (Panel note in notes.ToList())
+                {
+                    blockType = (int)note.Tag;
+
+                    if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
+                    {
+                        if (blockType > 1) // 긴 블록 처리
+                        {
+                            if (curTime - startTime <= targetTime * blockType)
+                            {
+                                rLabel.Text = "Holding...";
+                                rLabel.ForeColor = Color.Orange;
+                                return;
+                            }
+                        }
+                        else // 짧은 블록 처리
+                        {
+                            double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
+                            double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+
+                            if (difference < 100)
+                            {
+                                perfectCount++;
+                                combo++;
+                                rLabel.Text = "Perfect!";
+                                rLabel.ForeColor = Color.Green;
+                            }
+                            else if (difference < 200)
+                            {
+                                goodCount++;
+                                combo++;
+                                rLabel.Text = "Good!";
+                                rLabel.ForeColor = Color.Blue;
+                            }
+                            else
+                            {
+                                badCount++;
+                                combo = 0;
+                                rLabel.Text = "Bad!";
+                                rLabel.ForeColor = Color.Red;
+                            }
+
+                            comboLabel.Text = "Combo: " + combo;
+                            notes.Remove(note);
+                            note.Dispose();
+                            break;
+                        }
+                    }
+                }
+            }
+            else if (!isPressed && blockType > 1) // 긴 블록이 끝난 경우 처리
+            {
+                foreach (Panel note in notes.ToList())
+                {
+                    if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
+                    {
+                        double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
+                        double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+
+                        if (difference < 100)
+                        {
+                            perfectCount++;
+                            combo++;
+                            rLabel.Text = "Perfect!";
+                            rLabel.ForeColor = Color.Green;
+                        }
+                        else if (difference < 200)
+                        {
+                            goodCount++;
+                            combo++;
+                            rLabel.Text = "Good!";
+                            rLabel.ForeColor = Color.Blue;
+                        }
+                        else
+                        {
+                            badCount++;
+                            combo = 0;
+                            rLabel.Text = "Bad!";
+                            rLabel.ForeColor = Color.Red;
+                        }
+
+                        comboLabel.Text = "Combo: " + combo;
+                        notes.Remove(note);
+                        note.Dispose();
+                        break;
+                    }
+                }       
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

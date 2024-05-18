@@ -38,7 +38,13 @@
             this.bar3 = new System.Windows.Forms.Panel();
             this.bar4 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.resultLabel = new System.Windows.Forms.Label();
+            this.rLabel = new System.Windows.Forms.Label();
+            this.btnQ = new System.Windows.Forms.Button();
+            this.btnW = new System.Windows.Forms.Button();
+            this.btnE = new System.Windows.Forms.Button();
+            this.btnR = new System.Windows.Forms.Button();
+            this.comboLabel = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // imageList1
@@ -51,9 +57,9 @@
             // 
             this.btnStop.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnStop.BackgroundImage = global::oss_rythm.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(733, 22);
+            this.btnStop.Location = new System.Drawing.Point(628, 24);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(28, 24);
+            this.btnStop.Size = new System.Drawing.Size(24, 26);
             this.btnStop.TabIndex = 0;
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
@@ -64,57 +70,122 @@
             // 
             // bar1
             // 
-            this.bar1.Location = new System.Drawing.Point(12, 22);
+            this.bar1.Location = new System.Drawing.Point(10, 24);
             this.bar1.Name = "bar1";
-            this.bar1.Size = new System.Drawing.Size(152, 492);
+            this.bar1.Size = new System.Drawing.Size(130, 558);
             this.bar1.TabIndex = 2;
             // 
             // bar2
             // 
-            this.bar2.Location = new System.Drawing.Point(170, 22);
+            this.bar2.Location = new System.Drawing.Point(146, 24);
             this.bar2.Name = "bar2";
-            this.bar2.Size = new System.Drawing.Size(152, 492);
+            this.bar2.Size = new System.Drawing.Size(130, 558);
             this.bar2.TabIndex = 6;
             // 
             // bar3
             // 
-            this.bar3.Location = new System.Drawing.Point(328, 22);
+            this.bar3.Location = new System.Drawing.Point(281, 24);
             this.bar3.Name = "bar3";
-            this.bar3.Size = new System.Drawing.Size(152, 492);
+            this.bar3.Size = new System.Drawing.Size(130, 558);
             this.bar3.TabIndex = 7;
             // 
             // bar4
             // 
-            this.bar4.Location = new System.Drawing.Point(486, 22);
+            this.bar4.Location = new System.Drawing.Point(417, 24);
             this.bar4.Name = "bar4";
-            this.bar4.Size = new System.Drawing.Size(152, 492);
+            this.bar4.Size = new System.Drawing.Size(130, 558);
             this.bar4.TabIndex = 7;
             // 
-            // resultLabel
+            // rLabel
             // 
-            this.resultLabel.AutoSize = true;
-            this.resultLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resultLabel.Location = new System.Drawing.Point(441, 799);
-            this.resultLabel.Name = "resultLabel";
-            this.resultLabel.Size = new System.Drawing.Size(63, 29);
-            this.resultLabel.TabIndex = 9;
-            this.resultLabel.Text = "Wait";
+            this.rLabel.AutoSize = true;
+            this.rLabel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rLabel.Location = new System.Drawing.Point(441, 799);
+            this.rLabel.Name = "rLabel";
+            this.rLabel.Size = new System.Drawing.Size(63, 29);
+            this.rLabel.TabIndex = 9;
+            this.rLabel.Text = "Wait";
+            // 
+            // btnQ
+            // 
+            this.btnQ.Location = new System.Drawing.Point(10, 588);
+            this.btnQ.Name = "btnQ";
+            this.btnQ.Size = new System.Drawing.Size(130, 46);
+            this.btnQ.TabIndex = 9;
+            this.btnQ.Text = "Q";
+            this.btnQ.UseVisualStyleBackColor = true;
+            // 
+            // btnW
+            // 
+            this.btnW.Location = new System.Drawing.Point(148, 588);
+            this.btnW.Name = "btnW";
+            this.btnW.Size = new System.Drawing.Size(130, 46);
+            this.btnW.TabIndex = 10;
+            this.btnW.Text = "W";
+            this.btnW.UseVisualStyleBackColor = true;
+            // 
+            // btnE
+            // 
+            this.btnE.Location = new System.Drawing.Point(281, 588);
+            this.btnE.Name = "btnE";
+            this.btnE.Size = new System.Drawing.Size(130, 46);
+            this.btnE.TabIndex = 11;
+            this.btnE.Text = "E";
+            this.btnE.UseVisualStyleBackColor = true;
+            // 
+            // btnR
+            // 
+            this.btnR.Location = new System.Drawing.Point(417, 588);
+            this.btnR.Name = "btnR";
+            this.btnR.Size = new System.Drawing.Size(130, 46);
+            this.btnR.TabIndex = 12;
+            this.btnR.Text = "R";
+            this.btnR.UseVisualStyleBackColor = true;
+            // 
+            // comboLabel
+            // 
+            this.comboLabel.AutoSize = true;
+            this.comboLabel.Font = new System.Drawing.Font("굴림", 33F);
+            this.comboLabel.Location = new System.Drawing.Point(566, 116);
+            this.comboLabel.Name = "comboLabel";
+            this.comboLabel.Size = new System.Drawing.Size(141, 44);
+            this.comboLabel.TabIndex = 13;
+            this.comboLabel.Text = "label1";
+            this.comboLabel.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("굴림", 33F);
+            this.label2.Location = new System.Drawing.Point(566, 206);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(141, 44);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "label2";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 661);
+            this.ClientSize = new System.Drawing.Size(800, 716);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.comboLabel);
+            this.Controls.Add(this.btnR);
+            this.Controls.Add(this.btnE);
+            this.Controls.Add(this.btnW);
+            this.Controls.Add(this.btnQ);
             this.Controls.Add(this.bar4);
             this.Controls.Add(this.bar3);
             this.Controls.Add(this.bar2);
             this.Controls.Add(this.bar1);
             this.Controls.Add(this.btnStop);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.IsMdiContainer = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,7 +199,13 @@
         private System.Windows.Forms.Panel bar3;
         private System.Windows.Forms.Panel bar4;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Label resultLabel;
+        private System.Windows.Forms.Label rLabel;
+        private System.Windows.Forms.Button btnQ;
+        private System.Windows.Forms.Button btnW;
+        private System.Windows.Forms.Button btnE;
+        private System.Windows.Forms.Button btnR;
+        private System.Windows.Forms.Label comboLabel;
+        private System.Windows.Forms.Label label2;
     }
 }
 

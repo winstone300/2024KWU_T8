@@ -114,5 +114,10 @@ namespace oss_rythm
                 }
             }
         }
+
+        private void Custom_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
