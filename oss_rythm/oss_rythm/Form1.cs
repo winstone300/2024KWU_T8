@@ -71,16 +71,6 @@ namespace oss_rythm
             btnW.MouseUp += Btn_MouseUp;
             btnE.MouseUp += Btn_MouseUp;
             btnR.MouseUp += Btn_MouseUp;
-            this.Controls.Add(btnQ);
-            this.Controls.Add(btnW);
-            this.Controls.Add(btnE);
-            this.Controls.Add(btnR);
-
-            // 레이블 초기화
-            comboLabel.Text = "Combo: 0"; 
-            rLabel.Text = "";
-            this.Controls.Add(comboLabel);
-            this.Controls.Add(rLabel);
         }
 
         // 게임 타이머 틱 이벤트 핸들러
@@ -137,7 +127,8 @@ namespace oss_rythm
             {
                 Size = new Size(152, blockHeight),
                 BackColor = Color.Blue,
-                Location = new Point(0, 0)
+                Location = new Point(0, 0),
+                Tag = blockType
             };
             bar.Controls.Add(note);
             notes.Add(note);
@@ -255,43 +246,43 @@ namespace oss_rythm
 
                     if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
                     {
-                        if (blockType > 1) // 긴 블록 처리
+                        if (blockType > 1)
                         {
                             if (curTime - startTime <= targetTime * blockType)
                             {
-                                rLabel.Text = "Holding...";
-                                rLabel.ForeColor = Color.Orange;
+                                label2.Text = "Holding...";
+                                label2.ForeColor = Color.Orange;
                                 return;
                             }
                         }
-                        else // 짧은 블록 처리
+                        else
                         {
-                            double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
-                            double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+                            double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0);
+                            double difference = Math.Abs(curTime - noteTime);
 
                             if (difference < 100)
                             {
                                 perfectCount++;
                                 combo++;
-                                rLabel.Text = "Perfect!";
-                                rLabel.ForeColor = Color.Green;
+                                label2.Text = "Perfect!";
+                                label2.ForeColor = Color.Green;
                             }
                             else if (difference < 200)
                             {
                                 goodCount++;
                                 combo++;
-                                rLabel.Text = "Good!";
-                                rLabel.ForeColor = Color.Blue;
+                                label2.Text = "Good!";
+                                label2.ForeColor = Color.Blue;
                             }
                             else
                             {
                                 badCount++;
                                 combo = 0;
-                                rLabel.Text = "Bad!";
-                                rLabel.ForeColor = Color.Red;
+                                label2.Text = "Bad!";
+                                label2.ForeColor = Color.Red;
                             }
 
-                            comboLabel.Text = "Combo: " + combo;
+                            label1.Text = "Combo: " + combo;
                             notes.Remove(note);
                             note.Dispose();
                             break;
@@ -299,47 +290,47 @@ namespace oss_rythm
                     }
                 }
             }
-            else if (!isPressed && blockType > 1) // 긴 블록이 끝난 경우 처리
+            else if (!isPressed && blockType > 1)
             {
                 foreach (Panel note in notes.ToList())
                 {
                     if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
                     {
-                        double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
-                        double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+                        double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0);
+                        double difference = Math.Abs(curTime - noteTime);
 
                         if (difference < 100)
                         {
                             perfectCount++;
                             combo++;
-                            rLabel.Text = "Perfect!";
-                            rLabel.ForeColor = Color.Green;
+                            label2.Text = "Perfect!";
+                            label2.ForeColor = Color.Green;
                         }
                         else if (difference < 200)
                         {
                             goodCount++;
                             combo++;
-                            rLabel.Text = "Good!";
-                            rLabel.ForeColor = Color.Blue;
+                            label2.Text = "Good!";
+                            label2.ForeColor = Color.Blue;
                         }
                         else
                         {
                             badCount++;
                             combo = 0;
-                            rLabel.Text = "Bad!";
-                            rLabel.ForeColor = Color.Red;
+                            label2.Text = "Bad!";
+                            label2.ForeColor = Color.Red;
                         }
 
-                        comboLabel.Text = "Combo: " + combo;
+                        label1.Text = "Combo: " + combo;
                         notes.Remove(note);
                         note.Dispose();
                         break;
                     }
-                }       
+                }
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+            private void label1_Click(object sender, EventArgs e)
         {
 
         }

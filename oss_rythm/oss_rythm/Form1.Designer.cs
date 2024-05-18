@@ -43,7 +43,7 @@
             this.btnW = new System.Windows.Forms.Button();
             this.btnE = new System.Windows.Forms.Button();
             this.btnR = new System.Windows.Forms.Button();
-            this.comboLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -142,16 +142,16 @@
             this.btnR.Text = "R";
             this.btnR.UseVisualStyleBackColor = true;
             // 
-            // comboLabel
+            // label1
             // 
-            this.comboLabel.AutoSize = true;
-            this.comboLabel.Font = new System.Drawing.Font("굴림", 33F);
-            this.comboLabel.Location = new System.Drawing.Point(566, 116);
-            this.comboLabel.Name = "comboLabel";
-            this.comboLabel.Size = new System.Drawing.Size(141, 44);
-            this.comboLabel.TabIndex = 13;
-            this.comboLabel.Text = "label1";
-            this.comboLabel.Click += new System.EventHandler(this.label1_Click);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("굴림", 33F);
+            this.label1.Location = new System.Drawing.Point(566, 116);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(141, 44);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "label1";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -169,7 +169,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 716);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.comboLabel);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnR);
             this.Controls.Add(this.btnE);
             this.Controls.Add(this.btnW);
@@ -204,7 +204,7 @@
         private System.Windows.Forms.Button btnW;
         private System.Windows.Forms.Button btnE;
         private System.Windows.Forms.Button btnR;
-        private System.Windows.Forms.Label comboLabel;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
     }
 }
