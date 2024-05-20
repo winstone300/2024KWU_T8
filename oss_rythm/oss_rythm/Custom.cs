@@ -19,8 +19,10 @@ namespace oss_rythm
     {
         private WindowsMediaPlayer _media;
         int progressPercentage;
+        double bpm;
         Form1 form1;
         Form parent;
+        private List<Button> btnList;
         public Custom(Form parent)
         {
             InitializeComponent();
@@ -28,6 +30,11 @@ namespace oss_rythm
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.None;
             this.parent = parent;
+            btnList = new List<Button>()
+            {
+                btnEasy,btnNormal,btnHard,btnBack,btnLoad
+            };
+            btn_UI();
             progressBar1.Value = 0;
             webBrowser1.ProgressChanged += new WebBrowserProgressChangedEventHandler(webBrowser1_ProgressChanged);
         }
@@ -41,6 +48,7 @@ namespace oss_rythm
         private void btnLoad_Click(object sender, EventArgs e)
         {
             BpmLoding.Text = "Loading ...";
+            progressBar1.Value = 0;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (_media == null)
@@ -58,6 +66,18 @@ namespace oss_rythm
             }
         }
 
+        public void btn_UI()
+        {
+            foreach(Button btn in btnList)
+            {
+                btn.FlatStyle = FlatStyle.Flat;
+                btn.FlatAppearance.BorderSize = 1;
+                btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
+                btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
+                btn.BackColor = Color.Transparent;
+            }
+        }
+
         //bpm 태그 추출
         private void ExtractBpmValues()
         {
@@ -66,6 +86,7 @@ namespace oss_rythm
             {
                 if (element.GetAttribute("className") == "table_bpm")
                 {
+                    bpm = int.Parse(element.InnerText.Trim());
                     lblBpmInfo.Text = element.InnerText.Trim();
                     return;
                 }
@@ -84,7 +105,7 @@ namespace oss_rythm
                 MessageBox.Show("BPM 추출 중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            form1 = new Form1(_media,parent);
+            form1 = new Form1(_media,parent,bpm);
             form1.Show();
             _media.controls.play();
             this.Close();

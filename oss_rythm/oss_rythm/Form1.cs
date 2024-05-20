@@ -26,7 +26,7 @@ namespace oss_rythm
         private int perfectCount = 0;
         private int goodCount = 0;
         private int badCount = 0;
-        private double bpm = 50;
+        private double bpm;
         private double targetTime;
         private int countTarget = 1;
         private long startTime;
@@ -35,8 +35,9 @@ namespace oss_rythm
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
 
-        public Form1(WindowsMediaPlayer media, Form parent)
+        public Form1(WindowsMediaPlayer media, Form parent,double bpm)
         {
+            this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
             InitializeGame(); // 게임 초기화 메서드 호출
             InitializeUI(); // UI 초기화 메서드 호출
