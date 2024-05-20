@@ -45,6 +45,7 @@
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.BpmLoding = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
