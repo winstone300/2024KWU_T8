@@ -23,6 +23,8 @@ namespace oss_rythm
         Form1 form1;
         Form parent;
         private List<Button> btnList;
+        private Dictionary<string, string> musicFiles; // 음악 파일의 경로를 저장하는 딕셔너리
+        private bool isFileLoading = false; // 파일 로딩 여부를 확인하는 플래그
         public Custom(Form parent)
         {
             InitializeComponent();
@@ -37,6 +39,9 @@ namespace oss_rythm
             btn_UI();
             progressBar1.Value = 0;
             webBrowser1.ProgressChanged += new WebBrowserProgressChangedEventHandler(webBrowser1_ProgressChanged);
+            webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser1_DocumentCompleted); // 웹 브라우저 로드 완료 이벤트 핸들러 등록
+            musicFiles = new Dictionary<string, string>(); // 딕셔너리 초기화
+            listBox1.SelectedIndexChanged += new EventHandler(listBox1_SelectedIndexChanged); // 이벤트 핸들러 등록
         }
         private void InitializeOpenFileDialog()
         {
@@ -61,10 +66,52 @@ namespace oss_rythm
                 string pattern = @"^(.+)\.[^.]+$";
                 string RefileName = Regex.Replace(fileName, pattern, "$1");
                 lblTitleInfo.Text = RefileName;
+                
+                // 제목을 listBox1에 추가하고 경로를 딕셔너리에 저장
+                if (!musicFiles.ContainsKey(RefileName))
+                {
+                    listBox1.Items.Add(RefileName);
+                    musicFiles[RefileName] = ofd.FileName;
+                }
+
+                isFileLoading = true; // 음악 파일 로딩 플래그 설정
                 string url = "https://songdata.io/search?query=" + RefileName ;
                 webBrowser1.Navigate(url);
             }
         }
+
+        // listBox1에서 아이템을 선택했을 때
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem != null)
+            {
+                string selectedTitle = listBox1.SelectedItem.ToString();
+                if (musicFiles.ContainsKey(selectedTitle))
+                {
+                    string filePath = musicFiles[selectedTitle];
+                    LoadMusicFile(filePath, selectedTitle);
+                }
+            }
+        }
+
+        private void LoadMusicFile(string filePath, string title)
+        {
+           if (_media == null)
+           {
+               _media = new WindowsMediaPlayer();
+           }
+           _media.URL = filePath;
+           _media.controls.stop();
+           lblTitleInfo.Text = title;
+
+           // 음악 파일 로딩 플래그 설정
+           isFileLoading = true;
+           string url = "https://songdata.io/search?query=" + title;
+           webBrowser1.Navigate(url);
+
+           BpmLoding.Text = "Loading ...";
+           progressBar1.Value = 0;
+       }
 
         public void btn_UI()
         {
@@ -120,7 +167,11 @@ namespace oss_rythm
         //웹브라우저 로딩 완료시 실행
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            ExtractBpmValues();
+            if (isFileLoading)
+            {
+                ExtractBpmValues();
+                isFileLoading = false; // 로딩 플래그 리셋
+            }
         }
 
         private void webBrowser1_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
