@@ -74,3 +74,18 @@ C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.Gen
 C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
 C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
 C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe.config
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.pdb
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.AssemblyReference.cache
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\Interop.WMPLib.dll
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.ResolveComReference.cache
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Custom.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Form1.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pause.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Properties.Resources.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Start.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.GenerateResource.cache
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb

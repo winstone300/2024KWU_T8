@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Media;
 using WMPLib;
 
 namespace oss_rythm
@@ -17,39 +17,57 @@ namespace oss_rythm
         pause pause;
         WindowsMediaPlayer _media;
         Form parent;
-        // 게임 타이머 추가
         private Timer gameTimer = new Timer();
-        private List<Panel> notes = new List<Panel>(); // 활성 노트를 추적하는 리스트
-        
-        private int combo = 0; // 콤보 초기값
-        private int perfectCount = 0; // Perfect 카운트
-        private int goodCount = 0; // Good 카운트
-        private int badCount = 0; // Bad 카운트
-        private double bpm = 220; // 예제 BPM 값, 실제로는 크롤링된 값을 사용할 것
-        private double targetTime; // 목표 시간
-        private int countTarget = 1; // 비트 누적 카운터
-        private long startTime; // 곡 시작 시간
+        private List<Panel> notes = new List<Panel>();
+        private Dictionary<Panel, bool> keyHoldStatus = new Dictionary<Panel, bool>();
+        private Dictionary<Panel, bool> hitStatus = new Dictionary<Panel, bool>();
 
-        private Random random = new Random(); // 랜덤 함수 추가
-        private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>(); // 다음 비트를 건너뛸 패널과 비울 비트 수 저장
-        public Form1(WindowsMediaPlayer media,Form parent)
+        private int combo = 0;
+        private int perfectCount = 0;
+        private int goodCount = 0;
+        private int badCount = 0;
+        private double bpm = 50;
+        private double targetTime;
+        private int countTarget = 1;
+        private long startTime;
+        private double totalScore = 0.0; // 총 점수 변수 추가
+
+        private Random random = new Random();
+        private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
+
+        public Form1(WindowsMediaPlayer media, Form parent)
         {
             InitializeComponent();
             InitializeGame(); // 게임 초기화 메서드 호출
             InitializeUI(); // UI 초기화 메서드 호출
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.None;
+            this.KeyPreview = true; // 키 입력을 폼에서 미리 처리하도록 설정
             _media = media;
             this.parent = parent;
 
+            // Initialize skipNext dictionary for each bar
             skipNext[bar1] = 0;
-            skipNext[bar2] =0;
+            skipNext[bar2] = 0;
             skipNext[bar3] = 0;
             skipNext[bar4] = 0;
 
-            this.KeyDown += new KeyEventHandler(Form1_KeyDown); // 키보드 입력 이벤트 핸들러 추가
-            this.KeyUp += new KeyEventHandler(Form1_KeyUp); // 키보드 뗌 이벤트 핸들러 추가
+            // Initialize key hold status and hit status
+            keyHoldStatus[bar1] = false;
+            keyHoldStatus[bar2] = false;
+            keyHoldStatus[bar3] = false;
+            keyHoldStatus[bar4] = false;
+
+            hitStatus[bar1] = false;
+            hitStatus[bar2] = false;
+            hitStatus[bar3] = false;
+            hitStatus[bar4] = false;
+
+            // Register KeyDown and KeyUp event handlers
+            this.KeyDown += new KeyEventHandler(Form1_KeyDown);
+            this.KeyUp += new KeyEventHandler(Form1_KeyUp);
         }
+
         // 게임 초기화 메서드
         private void InitializeGame()
         {
@@ -58,11 +76,10 @@ namespace oss_rythm
             targetTime = (60.0 / bpm) * 1000; // 목표 시간 계산 (밀리초 단위)
         }
 
+        // UI 초기화 메서드
         private void InitializeUI()
         {
-
-
-
+            // Register MouseDown and MouseUp event handlers for buttons
             btnQ.MouseDown += Btn_MouseDown;
             btnW.MouseDown += Btn_MouseDown;
             btnE.MouseDown += Btn_MouseDown;
@@ -71,23 +88,17 @@ namespace oss_rythm
             btnW.MouseUp += Btn_MouseUp;
             btnE.MouseUp += Btn_MouseUp;
             btnR.MouseUp += Btn_MouseUp;
-            this.Controls.Add(btnQ);
-            this.Controls.Add(btnW);
-            this.Controls.Add(btnE);
-            this.Controls.Add(btnR);
 
-            // 레이블 초기화
-            comboLabel.Text = "Combo: 0"; 
-            rLabel.Text = "";
-            this.Controls.Add(comboLabel);
-            this.Controls.Add(rLabel);
+            // Initialize labels (폼 디자이너에서 이미 추가된 레이블 사용)
+            label1.Text = "Combo: 0";
+            label2.Text = "Score: 0.0";
         }
 
         // 게임 타이머 틱 이벤트 핸들러
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
-            double getTime = curTime / (targetTime * countTarget);
+            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime; // 현재 시간을 밀리초 단위로 계산
+            double getTime = curTime / (targetTime * countTarget); // 목표 시간 대비 현재 시간의 비율 계산
 
             if ((int)getTime == 1)
             {
@@ -98,11 +109,59 @@ namespace oss_rythm
             // 노트 이동 로직
             foreach (Panel note in notes.ToList())
             {
-                note.Top += 5;
-                if (note.Top > note.Parent.Height - note.Height)
+                note.Top += 5; // 노트의 위치를 아래로 이동
+                if (note.Top > note.Parent.Height)
                 {
-                    notes.Remove(note);
-                    note.Dispose();
+                    if (note.Height > 0)
+                    {
+                        // 패널 끝에 도달한 긴 블록이 서서히 사라지도록
+                        note.Height -= 5;
+                    }
+                    else
+                    {
+                        // 긴 블록이 사라지면서 점수 판정
+                        Panel bar = note.Parent as Panel;
+                        if (keyHoldStatus[bar])
+                        {
+                            double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
+                            double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
+
+                            if (difference < 100)
+                            {
+                                perfectCount++;
+                                combo++;
+                                totalScore += 1.0;
+                                label2.Text = "Perfect!"; // Perfect 판정
+                                label2.ForeColor = Color.Green;
+                            }
+                            else if (difference < 200)
+                            {
+                                goodCount++;
+                                combo++;
+                                totalScore += 0.5;
+                                label2.Text = "Good!"; // Good 판정
+                                label2.ForeColor = Color.Blue;
+                            }
+                            else
+                            {
+                                badCount++;
+                                combo = 0;
+                                label2.Text = "Bad!"; // Bad 판정
+                                label2.ForeColor = Color.Red;
+                            }
+                        }
+                        else
+                        {
+                            badCount++;
+                            combo = 0;
+                            label2.Text = "Miss!"; // Miss 판정
+                            label2.ForeColor = Color.Red;
+                        }
+                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+
+                        notes.Remove(note); // 리스트에서 노트 제거
+                        note.Dispose(); // 노트 자원 해제
+                    }
                 }
             }
         }
@@ -110,7 +169,6 @@ namespace oss_rythm
         // 각 bar에 노트를 생성하는 메서드
         private void CreateNotes()
         {
-            // 랜덤으로 특정 패널을 제외하고 블록 생성
             int excludePanel = random.Next(1, 5);
             CreateNoteInBar(bar1, excludePanel == 1);
             CreateNoteInBar(bar2, excludePanel == 2);
@@ -125,29 +183,27 @@ namespace oss_rythm
             {
                 if (skipNext[bar] > 0)
                 {
-                    skipNext[bar]--; // 비워야 할 비트 수 감소
+                    skipNext[bar]--;
                 }
                 return;
             }
 
-            int blockType = random.Next(1, 5); // 1은 짧은 블록, 2는 3비트 긴 블록, 3은 5비트 긴 블록, 4는 7비트 블록
-            int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : 140;
+            int blockType = random.Next(1, 5);
+            int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 140 : 0;
 
             Panel note = new Panel
             {
                 Size = new Size(152, blockHeight),
                 BackColor = Color.Blue,
-                Location = new Point(0, 0)
+                Location = new Point(0, 0),
+                Tag = blockType // 블록 타입을 태그로 저장
             };
             bar.Controls.Add(note);
             notes.Add(note);
 
-           //이후 bpm에 따라 이부분의 간격을 조절 -> 항상 동일한 간격으로 두면 bpm이
-           //빠를 경우에는 간격이 너무 좁아질 수 있음
-                skipNext[bar] = blockType - 1;// 블록 타입에 따라 다음 몇 비트를 건너뛸지 설정
-                if (skipNext[bar] == 0) // 짧은 블록인 경우에도 이후 비트를 비울 수 있도록
-                    skipNext[bar] = 1;  
-            
+            skipNext[bar] = blockType - 1;
+            if (skipNext[bar] == 0)
+                skipNext[bar] = 1;
         }
 
         // 음악 재생 메서드
@@ -158,11 +214,13 @@ namespace oss_rythm
             gameTimer.Start(); // 게임 타이머 시작
         }
 
-        private void Music_Play(object sender,EventArgs e)
+        private void Music_Play(object sender, EventArgs e)
         {
-            PlayMusic();// 음악 재생 및 타이머 시작 메서드 호출로 변경
-            btnStop.Enabled = true;
-            btnStop.Visible = true;
+            startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 시작 시간 재기록
+            gameTimer.Start();
+            _media.controls.play(); // 음악 재생
+            btnStop.Enabled = true; // 스탑 버튼 활성화
+            btnStop.Visible = true; // 스탑 버튼 보이기
         }
 
         private void btnStop_Click(object sender, EventArgs e)
@@ -170,23 +228,21 @@ namespace oss_rythm
             gameTimer.Stop(); // 게임 타이머 중지
             pause = new pause(_media, this, parent);
             pause.TopLevel = true;
-           // pause.MdiParent = this;
-            pause.Changed += new EventHandler(Music_Play);
+            pause.Changed += new EventHandler(Music_Play); // Changed 이벤트 핸들러 추가
             pause.Show();
             pause.BringToFront(); // pause 창을 최상단으로 이동
             pause.TopMost = true; // pause 창을 최상단에 유지
             _media.controls.pause();
             btnStop.Enabled = false;
             btnStop.Visible = false;
-            
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             btnStop.BackgroundImageLayout = ImageLayout.Stretch;
             PlayMusic();
-            
         }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, true);
@@ -210,6 +266,7 @@ namespace oss_rythm
 
             HandleKeyPress(key, true);
         }
+
         private void Btn_MouseUp(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
@@ -223,12 +280,24 @@ namespace oss_rythm
 
             HandleKeyPress(key, false);
         }
+        // 키 입력 처리 메서드
         private void HandleKeyPress(Keys key, bool isPressed)
         {
-            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
+            // 키 누름/해제 시 버튼 색상 변경
+            if (key == Keys.Q)
+                btnQ.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.W)
+                btnW.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.E)
+                btnE.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.R)
+                btnR.BackColor = isPressed ? Color.Green : Color.White;
+
+            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime; // 현재 시간을 밀리초 단위로 계산
             Panel targetBar = null;
             int blockType = 0;
 
+            // 키에 해당하는 타겟 바 설정
             switch (key)
             {
                 case Keys.Q:
@@ -247,101 +316,118 @@ namespace oss_rythm
                     return;
             }
 
+            keyHoldStatus[targetBar] = isPressed; // 키 상태 업데이트
+
             if (isPressed)
             {
                 foreach (Panel note in notes.ToList())
                 {
                     blockType = (int)note.Tag;
 
-                    if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
+                    // 노트가 타겟 바에 있고, 패널 끝에 가까워졌을 때
+                    if (note.Parent == targetBar && note.Bottom >= this.ClientSize.Height - 10 && note.Top <= this.ClientSize.Height)
                     {
-                        if (blockType > 1) // 긴 블록 처리
+                        if (blockType > 1)
                         {
                             if (curTime - startTime <= targetTime * blockType)
                             {
-                                rLabel.Text = "Holding...";
-                                rLabel.ForeColor = Color.Orange;
+                                label2.Text = "Holding..."; // 긴 노트의 경우
+                                label2.ForeColor = Color.Orange;
                                 return;
                             }
                         }
-                        else // 짧은 블록 처리
+                        else
                         {
-                            double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
-                            double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+                            double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
+                            double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
 
                             if (difference < 100)
                             {
+                                hitStatus[targetBar] = true;
                                 perfectCount++;
                                 combo++;
-                                rLabel.Text = "Perfect!";
-                                rLabel.ForeColor = Color.Green;
+                                totalScore += 1.0;
+                                label2.Text = "Perfect!"; // Perfect 판정
+                                label2.ForeColor = Color.Green;
                             }
                             else if (difference < 200)
                             {
+                                hitStatus[targetBar] = true;
                                 goodCount++;
                                 combo++;
-                                rLabel.Text = "Good!";
-                                rLabel.ForeColor = Color.Blue;
+                                totalScore += 0.5;
+                                label2.Text = "Good!"; // Good 판정
+                                label2.ForeColor = Color.Blue;
                             }
                             else
                             {
                                 badCount++;
                                 combo = 0;
-                                rLabel.Text = "Bad!";
-                                rLabel.ForeColor = Color.Red;
+                                label2.Text = "Bad!"; // Bad 판정
+                                label2.ForeColor = Color.Red;
                             }
 
-                            comboLabel.Text = "Combo: " + combo;
-                            notes.Remove(note);
-                            note.Dispose();
+                            label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+                            notes.Remove(note); // 리스트에서 노트 제거
+                            note.Dispose(); // 노트 자원 해제
                             break;
                         }
                     }
                 }
             }
-            else if (!isPressed && blockType > 1) // 긴 블록이 끝난 경우 처리
+            else
             {
                 foreach (Panel note in notes.ToList())
                 {
-                    if (note.Parent == targetBar && note.Top > this.ClientSize.Height - note.Height - 10 && note.Top < this.ClientSize.Height)
+                    // 노트가 타겟 바에 있고, 패널 끝에 가까워졌을 때
+                    if (note.Parent == targetBar && note.Bottom >= this.ClientSize.Height - 10 && note.Top <= this.ClientSize.Height)
                     {
-                        double noteTime = curTime - (note.Top / 5.0) * (targetTime / 200.0); // 노트 소멸 시간 계산
-                        double difference = Math.Abs(curTime - noteTime); // 시간 차이 계산
+                        double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
+                        double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
 
                         if (difference < 100)
                         {
-                            perfectCount++;
-                            combo++;
-                            rLabel.Text = "Perfect!";
-                            rLabel.ForeColor = Color.Green;
+                            if (!hitStatus[targetBar])
+                            {
+                                perfectCount++;
+                                combo++;
+                                totalScore += 1.0;
+                                label2.Text = "Perfect!"; // Perfect 판정
+                                label2.ForeColor = Color.Green;
+                            }
                         }
                         else if (difference < 200)
                         {
-                            goodCount++;
-                            combo++;
-                            rLabel.Text = "Good!";
-                            rLabel.ForeColor = Color.Blue;
+                            if (!hitStatus[targetBar])
+                            {
+                                goodCount++;
+                                combo++;
+                                totalScore += 0.5;
+                                label2.Text = "Good!"; // Good 판정
+                                label2.ForeColor = Color.Blue;
+                            }
                         }
                         else
                         {
                             badCount++;
                             combo = 0;
-                            rLabel.Text = "Bad!";
-                            rLabel.ForeColor = Color.Red;
+                            label2.Text = "Bad!"; // Bad 판정
+                            label2.ForeColor = Color.Red;
                         }
 
-                        comboLabel.Text = "Combo: " + combo;
-                        notes.Remove(note);
-                        note.Dispose();
+                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+                        notes.Remove(note); // 리스트에서 노트 제거
+                        note.Dispose(); // 노트 자원 해제
                         break;
                     }
-                }       
+                }
+                hitStatus[targetBar] = false; // 다음 노트를 위해 hit 상태 초기화
             }
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+            // 아무 것도 하지 않음
         }
     }
 }
