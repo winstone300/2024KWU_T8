@@ -45,6 +45,7 @@
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.BpmLoding = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -219,6 +220,17 @@
             this.BpmLoding.TabIndex = 14;
             this.BpmLoding.Text = ".";
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 18;
+            this.listBox1.Items.AddRange(new object[] {
+            "-------------Select Music--------------"});
+            this.listBox1.Location = new System.Drawing.Point(970, 123);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(357, 328);
+            this.listBox1.TabIndex = 15;
+            // 
             // Custom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
@@ -226,6 +238,7 @@
             this.BackgroundImage = global::oss_rythm.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1396, 690);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.BpmLoding);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.webBrowser1);
@@ -265,5 +278,6 @@
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label BpmLoding;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
