@@ -49,6 +49,7 @@ namespace oss_rythm
         private void Form1_Load(object sender, EventArgs e)
         {
             btnStop.BackgroundImageLayout = ImageLayout.Stretch;
+            int mash;
         }
 
     }
