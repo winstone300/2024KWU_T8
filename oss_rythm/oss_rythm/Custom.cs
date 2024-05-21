@@ -17,6 +17,7 @@ namespace oss_rythm
 {
     public partial class Custom : Form
     {
+        //Team 8
         private WindowsMediaPlayer _media;
         int progressPercentage;
         double bpm;
