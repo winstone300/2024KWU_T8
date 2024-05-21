@@ -32,7 +32,7 @@ namespace oss_rythm
             this.parent = parent;
             btnList = new List<Button>()
             {
-                btnEasy,btnNormal,btnHard,btnBack,btnLoad
+                btnEasy,btnNormal,btnHard,btnBack,btnLoad,
             };
             btn_UI();
             progressBar1.Value = 0;

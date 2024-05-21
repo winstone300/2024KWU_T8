@@ -215,8 +215,9 @@
             this.BpmLoding.AutoSize = true;
             this.BpmLoding.Location = new System.Drawing.Point(970, 506);
             this.BpmLoding.Name = "BpmLoding";
-            this.BpmLoding.Size = new System.Drawing.Size(0, 18);
+            this.BpmLoding.Size = new System.Drawing.Size(14, 18);
             this.BpmLoding.TabIndex = 14;
+            this.BpmLoding.Text = ".";
             // 
             // Custom
             // 
