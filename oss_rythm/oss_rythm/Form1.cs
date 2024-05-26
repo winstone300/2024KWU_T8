@@ -180,7 +180,7 @@ namespace oss_rythm
         // 특정 bar에 노트를 생성하는 메서드
         private void CreateNoteInBar(Panel bar, bool exclude)
         {
-            if (exclude || skipNext[bar] > 0)
+            if (!exclude || skipNext[bar] > 0)
             {
                 if (skipNext[bar] > 0)
                 {
@@ -190,7 +190,7 @@ namespace oss_rythm
             }
 
             int blockType = random.Next(1, 5);
-            int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 140 : 0;
+            int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 40 : blockType == 3 ? 20 : blockType == 4 ? 20 : 0;
 
             Panel note = new Panel
             {

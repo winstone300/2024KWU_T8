@@ -54,6 +54,7 @@ namespace oss_rythm
         {
             BpmLoding.Text = "Loading ...";
             progressBar1.Value = 0;
+            lblBpmInfo.Text = "Loading ...";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 if (_media == null)
@@ -111,6 +112,7 @@ namespace oss_rythm
 
            BpmLoding.Text = "Loading ...";
            progressBar1.Value = 0;
+            lblBpmInfo.Text = "Loading ...";
        }
 
         public void btn_UI()
