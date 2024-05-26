@@ -96,7 +96,17 @@ namespace oss_rythm
                 if (musicFiles.ContainsKey(titleOnly))
                 {
                     string filePath = musicFiles[titleOnly].FilePath;
-                    LoadMusicFile(filePath, titleOnly);
+                    lblTitleInfo.Text = titleOnly;  // 타이틀 부분만 바로 추출 ++
+                    // 선택된 항목에서 BPM 추출하여 lblBpmInfo에 즉시 설정 ++
+                    var bpmMatch = Regex.Match(selectedTitle, @"\(BPM: (\d+(\.\d+)?)\)");
+                    if (bpmMatch.Success)
+                    {
+                        lblBpmInfo.Text = bpmMatch.Groups[1].Value;
+                    }
+                    else
+                    {
+                        lblBpmInfo.Text = " ";
+                    }
                 }
             }
             else // ++
