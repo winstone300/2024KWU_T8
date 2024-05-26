@@ -46,15 +46,17 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.BpmLoding = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.labelSelect = new System.Windows.Forms.Label();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(1184, 57);
-            this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLoad.Location = new System.Drawing.Point(970, 47);
+            this.btnLoad.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(107, 34);
+            this.btnLoad.Size = new System.Drawing.Size(124, 34);
             this.btnLoad.TabIndex = 3;
             this.btnLoad.Text = "불러오기";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -67,9 +69,9 @@
             // btnPlay
             // 
             this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.btnPlay.Location = new System.Drawing.Point(970, 550);
+            this.btnPlay.Location = new System.Drawing.Point(984, 577);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(321, 82);
+            this.btnPlay.Size = new System.Drawing.Size(321, 67);
             this.btnPlay.TabIndex = 4;
             this.btnPlay.Text = "PLAY";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -195,7 +197,7 @@
             // webBrowser1
             // 
             this.webBrowser1.Location = new System.Drawing.Point(970, 123);
-            this.webBrowser1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.webBrowser1.Margin = new System.Windows.Forms.Padding(4);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(29, 30);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
@@ -222,13 +224,33 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
+            this.listBox1.HorizontalScrollbar = true;
             this.listBox1.ItemHeight = 18;
-            this.listBox1.Items.AddRange(new object[] {
-            "-------------Select Music--------------"});
             this.listBox1.Location = new System.Drawing.Point(970, 123);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(357, 328);
             this.listBox1.TabIndex = 15;
+            // 
+            // labelSelect
+            // 
+            this.labelSelect.AutoSize = true;
+            this.labelSelect.BackColor = System.Drawing.Color.White;
+            this.labelSelect.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.labelSelect.Location = new System.Drawing.Point(970, 98);
+            this.labelSelect.Name = "labelSelect";
+            this.labelSelect.Size = new System.Drawing.Size(357, 25);
+            this.labelSelect.TabIndex = 16;
+            this.labelSelect.Text = "------------------Select Music----------------";
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(1200, 47);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(127, 34);
+            this.btnDelete.TabIndex = 17;
+            this.btnDelete.Text = "아이템 삭제";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // Custom
             // 
@@ -237,6 +259,8 @@
             this.BackgroundImage = global::oss_rythm.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1396, 690);
+            this.Controls.Add(this.btnDelete);
+            this.Controls.Add(this.labelSelect);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.BpmLoding);
             this.Controls.Add(this.progressBar1);
@@ -278,5 +302,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label BpmLoding;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label labelSelect;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
