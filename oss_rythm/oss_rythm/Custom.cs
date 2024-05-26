@@ -17,13 +17,15 @@ namespace oss_rythm
 {
     public partial class Custom : Form
     {
+        //Team 8
         private WindowsMediaPlayer _media;
         int progressPercentage;
+        int mode = 1;
         double bpm;
         Form1 form1;
         Form parent;
         private List<Button> btnList;
-        private Dictionary<string, string> musicFiles; // 음악 파일의 경로를 저장하는 딕셔너리
+        private Dictionary<string, (string FilePath, double Bpm)> musicFiles; // 음악 파일의 경로를 저장하는 딕셔너리
         private bool isFileLoading = false; // 파일 로딩 여부를 확인하는 플래그
         public Custom(Form parent)
         {
@@ -34,14 +36,17 @@ namespace oss_rythm
             this.parent = parent;
             btnList = new List<Button>()
             {
-                btnEasy,btnNormal,btnHard,btnBack,btnLoad,
+                btnEasy,btnNormal,btnHard,btnBack,btnLoad, btnDelete // ++ btnDelete 추가
             };
             btn_UI();
             progressBar1.Value = 0;
             webBrowser1.ProgressChanged += new WebBrowserProgressChangedEventHandler(webBrowser1_ProgressChanged);
             webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser1_DocumentCompleted); // 웹 브라우저 로드 완료 이벤트 핸들러 등록
-            musicFiles = new Dictionary<string, string>(); // 딕셔너리 초기화
+            musicFiles = new Dictionary<string, (string FilePath, double Bpm)> (); // 딕셔너리 초기화
             listBox1.SelectedIndexChanged += new EventHandler(listBox1_SelectedIndexChanged); // 이벤트 핸들러 등록
+
+            LoadListBoxItems(); // ++ listBox1 항목 복원
+            labelSelect.BackColor = Color.Transparent; // ++ 투명 배경 설정
         }
         private void InitializeOpenFileDialog()
         {
@@ -72,7 +77,7 @@ namespace oss_rythm
                 if (!musicFiles.ContainsKey(RefileName))
                 {
                     listBox1.Items.Add(RefileName);
-                    musicFiles[RefileName] = ofd.FileName;
+                    musicFiles[RefileName] = (ofd.FileName, 0.0); // ++ 초기 BPM 값은 0.0으로 설정
                 }
 
                 isFileLoading = true; // 음악 파일 로딩 플래그 설정
@@ -87,11 +92,19 @@ namespace oss_rythm
             if (listBox1.SelectedItem != null)
             {
                 string selectedTitle = listBox1.SelectedItem.ToString();
-                if (musicFiles.ContainsKey(selectedTitle))
+                string titleOnly = selectedTitle.Split(new string[] { " (BPM: " }, StringSplitOptions.None)[0]; // ++ BPM 부분을 제외한 제목만 추출
+                if (musicFiles.ContainsKey(titleOnly))
                 {
-                    string filePath = musicFiles[selectedTitle];
-                    LoadMusicFile(filePath, selectedTitle);
+                    string filePath = musicFiles[titleOnly].FilePath;
+                    LoadMusicFile(filePath, titleOnly);
                 }
+            }
+            else // ++
+            {
+                // ++ 아이템이 선택되지 않았을 때 레이블 텍스트 초기화
+                lblTitleInfo.Text = " ";
+                lblScoreInfo.Text = " ";
+                lblBpmInfo.Text = " ";
             }
         }
 
@@ -115,6 +128,7 @@ namespace oss_rythm
             lblBpmInfo.Text = "Loading ...";
        }
 
+        //버튼 배경 투명하게 & 마우스 올릴시 클릭 화면
         public void btn_UI()
         {
             foreach(Button btn in btnList)
@@ -124,6 +138,8 @@ namespace oss_rythm
                 btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
                 btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
                 btn.BackColor = Color.Transparent;
+                btn.MouseEnter += Button_MouseEnter;
+                btn.MouseLeave += Button_MouseLeave;
             }
         }
 
@@ -137,7 +153,29 @@ namespace oss_rythm
                 {
                     bpm = int.Parse(element.InnerText.Trim());
                     lblBpmInfo.Text = element.InnerText.Trim();
+                    UpdateListBoxWithBpm(lblTitleInfo.Text, bpm); // ++ BPM 값을 업데이트
                     return;
+                }
+            }
+        }
+        // ++
+        private void UpdateListBoxWithBpm(string title, double bpm)
+        {
+            // 음악 파일 정보 업데이트
+            if (musicFiles.ContainsKey(title))
+            {
+                musicFiles[title] = (musicFiles[title].FilePath, bpm);
+
+                // listBox1 항목 업데이트
+                for (int i = 0; i < listBox1.Items.Count; i++)
+                {
+                    string item = listBox1.Items[i].ToString();
+                    string titleOnly = item.Split(new string[] { " (BPM: " }, StringSplitOptions.None)[0];
+                    if (titleOnly == title)
+                    {
+                        listBox1.Items[i] = $"{title} (BPM: {bpm})";
+                        break;
+                    }
                 }
             }
         }
@@ -154,8 +192,9 @@ namespace oss_rythm
                 MessageBox.Show("BPM 추출 중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            form1 = new Form1(_media,parent,bpm);
+            form1 = new Form1(_media,parent,bpm,mode);
             form1.Show();
+            SaveListBoxItems(); // ++ listBox1의 항목을 저장
             _media.controls.play();
             this.Close();
         }
@@ -163,6 +202,7 @@ namespace oss_rythm
         private void btnBack_Click(object sender, EventArgs e)
         {
             parent.Visible = true;
+            SaveListBoxItems(); // ++ listBox1의 항목을 저장
             this.Close();
         }
 
@@ -188,10 +228,98 @@ namespace oss_rythm
                 }
             }
         }
+        // ++ listBox1의 항목을 저장하는 메서드
+        private void SaveListBoxItems()
+        {
+            var savedItems = new List<string>();
+            foreach (var item in listBox1.Items)
+            {
+                savedItems.Add(item.ToString());
+            }
 
+            Properties.Settings.Default.SavedListBoxItems = string.Join(";", savedItems);
+            Properties.Settings.Default.SavedMusicFiles = string.Join(";", musicFiles.Select(kvp => $"{kvp.Key}|{kvp.Value.FilePath}|{kvp.Value.Bpm}")); // ++
+            Properties.Settings.Default.Save();
+        }
+
+        private void LoadListBoxItems()
+        {
+            var savedItems = Properties.Settings.Default.SavedListBoxItems;
+            if (!string.IsNullOrEmpty(savedItems))
+            {
+                var items = savedItems.Split(';');
+                listBox1.Items.AddRange(items);
+            }
+
+            var savedMusicFiles = Properties.Settings.Default.SavedMusicFiles;
+            if (!string.IsNullOrEmpty(savedMusicFiles))
+            {
+                var items = savedMusicFiles.Split(';');
+                foreach (var item in items)
+                {
+                    var kvp = item.Split('|');
+                    if (kvp.Length == 3 && double.TryParse(kvp[2], out double bpm)) // ++
+                    {
+                        musicFiles[kvp[0]] = (kvp[1], bpm);
+                    }
+                }
+            }
+        }
         private void Custom_Load(object sender, EventArgs e)
         {
 
+        }
+
+        // ++
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedItem != null)
+            {
+                string selectedTitle = listBox1.SelectedItem.ToString();
+                string titleOnly = selectedTitle.Split(new string[] { " (BPM: " }, StringSplitOptions.None)[0]; // ++ BPM 부분을 제외한 제목만 추출
+                listBox1.Items.Remove(selectedTitle);
+                if (musicFiles.ContainsKey(titleOnly))
+                {
+                    musicFiles.Remove(titleOnly);
+                }
+
+                // 변경된 항목을 저장
+                SaveListBoxItems();
+
+                // 레이블 텍스트 초기화
+                lblTitleInfo.Text = " ";
+                lblScoreInfo.Text = " ";
+                lblBpmInfo.Text = " ";
+            }
+            else
+            {
+                MessageBox.Show("삭제할 항목을 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void Button_MouseEnter(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Hand;
+        }
+        private void Button_MouseLeave(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.Default;
+        }
+
+        //난이도 (easy:0 , normal:1 , hard:2)
+        private void btnEasy_Click(object sender, EventArgs e)
+        {
+            mode = 0;
+        }
+
+        private void btnNormal_Click(object sender, EventArgs e)
+        {
+            mode = 1;
+        }
+
+        private void btnHard_Click(object sender, EventArgs e)
+        {
+            mode = 2;
         }
     }
 }

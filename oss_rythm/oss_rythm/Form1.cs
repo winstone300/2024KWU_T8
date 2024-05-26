@@ -23,6 +23,7 @@ namespace oss_rythm
         private Dictionary<Panel, bool> hitStatus = new Dictionary<Panel, bool>();
 
         private int combo = 0;
+        private int mode;
         private int perfectCount = 0;
         private int goodCount = 0;
         private int badCount = 0;
@@ -34,8 +35,10 @@ namespace oss_rythm
 
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
+        // 효과음 재생을 위한 WindowsMediaPlayer
+        private WindowsMediaPlayer effectSound; 
 
-        public Form1(WindowsMediaPlayer media, Form parent,double bpm)
+        public Form1(WindowsMediaPlayer media, Form parent,double bpm, int mode)
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -67,6 +70,11 @@ namespace oss_rythm
             // Register KeyDown and KeyUp event handlers
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
             this.KeyUp += new KeyEventHandler(Form1_KeyUp);
+            this.mode = mode; 
+            //특수 효과음
+            effectSound = new WindowsMediaPlayer();
+            effectSound.settings.volume = 0;
+            PlayKeyPressSound();
         }
 
         // 게임 초기화 메서드
@@ -171,27 +179,15 @@ namespace oss_rythm
         private void CreateNotes()
         {
             int excludePanel = random.Next(1, 5);
-            CreateNoteInBar(bar1, excludePanel == 1);
-            CreateNoteInBar(bar2, excludePanel == 2);
-            CreateNoteInBar(bar3, excludePanel == 3);
-            CreateNoteInBar(bar4, excludePanel == 4);
+            Set_Mode(bar1, excludePanel == 1, mode);
+            Set_Mode(bar2, excludePanel == 2, mode);
+            Set_Mode(bar3, excludePanel == 3, mode);
+            Set_Mode(bar4, excludePanel == 4, mode);
         }
 
         // 특정 bar에 노트를 생성하는 메서드
-        private void CreateNoteInBar(Panel bar, bool exclude)
+        private void CreateNoteInBar(Panel bar,int blockHeight,int blockType)
         {
-            if (!exclude || skipNext[bar] > 0)
-            {
-                if (skipNext[bar] > 0)
-                {
-                    skipNext[bar]--;
-                }
-                return;
-            }
-
-            int blockType = random.Next(1, 5);
-            int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 40 : blockType == 3 ? 20 : blockType == 4 ? 20 : 0;
-
             Panel note = new Panel
             {
                 Size = new Size(152, blockHeight),
@@ -205,6 +201,59 @@ namespace oss_rythm
             skipNext[bar] = blockType - 1;
             if (skipNext[bar] == 0)
                 skipNext[bar] = 1;
+        }
+
+        //난이도에 맞춰 노드 생성 메서드 호출
+        private void Set_Mode(Panel bar, bool exclude,int mode)
+        {
+            if(mode == 0)
+            {
+                if (!exclude || skipNext[bar] > 0)
+                {
+                    if (skipNext[bar] > 0)
+                    {
+                        skipNext[bar]--;
+                    }
+                    return;
+                }
+
+                int blockType = random.Next(1, 5);
+                int blockHeight = blockType == 1 ? 30 : blockType == 2 ? 30 : blockType == 3 ? 30 : blockType == 4 ? 30 : 0;
+
+                CreateNoteInBar (bar,blockHeight,blockType);
+            }
+            else if(mode == 1)
+            {
+                if (!exclude || skipNext[bar] > 0)
+                {
+                    if (skipNext[bar] > 0)
+                    {
+                        skipNext[bar]--;
+                    }
+                    return;
+                }
+
+                int blockType = random.Next(1, 5);
+                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 20 : 0;
+
+                CreateNoteInBar(bar, blockHeight, blockType);
+            }
+            else
+            {
+                if (exclude || skipNext[bar] > 0)
+                {
+                    if (skipNext[bar] > 0)
+                    {
+                        skipNext[bar]--;
+                    }
+                    return;
+                }
+
+                int blockType = random.Next(1, 5);
+                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 120 : 0;
+
+                CreateNoteInBar(bar, blockHeight, blockType);
+            }
         }
 
         // 음악 재생 메서드
@@ -247,11 +296,22 @@ namespace oss_rythm
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, true);
+            effectSound.settings.volume = 20;
         }
+        private void PlayKeyPressSound()
+        {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string relativePath = "long_effect_g6_10min.wav"; // 상대 경로
+            string fullPath = System.IO.Path.Combine(basePath, relativePath);
+            effectSound.URL = fullPath;
+        }
+
+
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, false);
+            effectSound.settings.volume = 0;
         }
 
         private void Btn_MouseDown(object sender, MouseEventArgs e)
