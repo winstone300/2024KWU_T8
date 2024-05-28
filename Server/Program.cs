@@ -60,12 +60,17 @@ namespace Server
             Console.WriteLine("Received: {0}", data);
 
             string[] parts = data.Split(':');
-            string username = parts[0];
-            string password = parts[1];
+            string command = parts[0];
 
-            string response = ValidateLogin(username, password) ? "Login Success" : "Login Failed";
-            byte[] responseBytes = Encoding.UTF8.GetBytes(response);
-            stream.Write(responseBytes, 0, responseBytes.Length);
+            if (command == "login")
+            {
+                string username = parts[1];
+                string password = parts[2];
+                
+                string response = ValidateLogin(username, password) ? "Login Success" : "Login Failed";
+                Console.WriteLine("Sending response: " + response);                
+                byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                stream.Write(responseBytes, 0, responseBytes.Length);
 
             client.Close();
         }
@@ -76,22 +81,69 @@ namespace Server
         {
             if(File.Exists(path))
             {
+                Console.WriteLine($"Loading users from {path}...");
                 var lines = File.ReadAllLines(path);
                 foreach(var line in lines)
                 {
                     var parts = line.Split(',');
                     if(parts.Length == 2)
                     {
-                        users[parts[0]] = parts[1];
+                        string username = parts[0].Trim();
+                        string password = parts[1].Trim();
+                        users[username] = password;
+                        Console.WriteLine($"Loaded user: {username}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid line format: {line}");
                     }
                 }
+                Console.WriteLine("Users loaded from CSV:");  // 디버그 메시지 추가
+                foreach (var user in users)
+                {
+                    Console.WriteLine($"Username: {user.Key}, Password: {user.Value}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"File not found: {path}");
             }
         }
 
         // 아이디, 비밀번호를 찾아내는 함수
         static bool ValidateLogin(string username, string password)
         {
-            return users.ContainsKey(username) && users[username] == password;
+            if (users.ContainsKey(username))
+            {
+                Console.WriteLine($"Validating user: {username}");
+                return users[username] == password;
+            }
+            return false;
+        }
+        static bool AddUserToCSV(string id, string password)
+        {
+           try
+           {
+               string path = "users.csv";
+               if (users.ContainsKey(id))
+               {
+                   Console.WriteLine("이미 존재하는 ID입니다.");
+                   return false;
+               }
+
+               using (StreamWriter sw = new StreamWriter(path, true))
+               {
+                   sw.WriteLine($"{id},{password}");
+               }
+
+               users[id] = password;  // 메모리 내 사용자 데이터도 업데이트
+               return true;
+           }
+           catch (Exception ex)
+           {
+               Console.WriteLine($"오류 발생: {ex.Message}");
+               return false;
+           }
         }
     }
 }
