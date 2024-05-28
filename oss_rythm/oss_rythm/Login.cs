@@ -18,6 +18,7 @@ namespace oss_rythm
         private NetworkStream stream;
         private bool isPasswordPlaceholder = true; // 비밀번호 필드가 placeholder 상태인지 확인
         private Timer statusClearTimer;
+        private bool isRegisterFormOpen = false;  // Register 폼이 열려 있는지 확인하는 플래그
 
         public Login()
         {
@@ -43,6 +44,8 @@ namespace oss_rythm
 
             // Login 버튼 클릭 이벤트 핸들러 추가
             btnLogin.Click += btnLogin_Click;
+            // Register 버튼 클릭 이벤트 핸들러 추가
+            btnRegister.Click += btnRegister_Click;
 
             statusClearTimer = new Timer();
             statusClearTimer.Interval = 1000; // 2초
@@ -116,7 +119,7 @@ namespace oss_rythm
                 client = new TcpClient("127.0.0.1", 13000); // 서버 연결
                 stream = client.GetStream();
 
-                string message = $"{username}:{password}";  // 로그인 요청 메시지
+                string message = $"login:{username}:{password}";  // 로그인 요청 메시지
                 byte[] data = Encoding.UTF8.GetBytes(message);
                 stream.Write(data, 0, data.Length);         // 서버로 메시지 전송
 
@@ -139,19 +142,19 @@ namespace oss_rythm
 
                 else
                 {
-                    lblStatus.Location = new Point(250, 260);
+                    lblStatus.Location = new Point(250, 240);
                     lblStatus.Text = "해당하는 ID가 없습니다. 다시 입력해주세요.";
                 }
             }
             catch (SocketException ex)
             {
-                lblStatus.Location = new Point(300, 260);
+                lblStatus.Location = new Point(300, 240);
                 lblStatus.Text = "서버에 연결할 수 없습니다.";
             }
 
             catch (Exception ex)
             {
-                lblStatus.Location = new Point(100, 260);
+                lblStatus.Location = new Point(100, 240);
                 lblStatus.Text = $"Exception: {ex.Message}";
             }
 
@@ -182,6 +185,26 @@ namespace oss_rythm
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnLogin_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnRegister_Click(object sender, EventArgs e)
+        {
+            if (!isRegisterFormOpen)
+            {
+                isRegisterFormOpen = true;
+                Register registerForm = new Register();
+                registerForm.FormClosed += RegisterForm_FormClosed;
+                registerForm.Show();
+            }
+        }
+        private void RegisterForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            isRegisterFormOpen = false;  // Register 폼이 닫히면 플래그를 false로 설정
         }
     }
 }
