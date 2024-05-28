@@ -30,11 +30,12 @@ namespace oss_rythm
             this.Visible = false;
         }
 
-        private void btnExit_Click(object sender, EventArgs e)
+        private void btnLogout_Click(object sender, EventArgs e)
         {
+            this.Hide();
+            Login loginForm = new Login();
+            loginForm.ShowDialog();
             this.Close();
         }
-
-
     }
 }
