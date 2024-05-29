@@ -72,8 +72,18 @@ namespace Server
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response);
                 stream.Write(responseBytes, 0, responseBytes.Length);
 
-                client.Close();
             }
+            else if (command == "register")
+            {
+                string username = parts[1];
+                string password = parts[2];
+
+                string response = AddUserToCSV(username, password) ? "Register Success" : "Register Failed";
+                Console.WriteLine("Sending response: " + response);
+                byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                stream.Write(responseBytes, 0, responseBytes.Length);
+            }
+            client.Close();
 
             // csv 파일 읽어내는 함수.
             // ","로 아이디, 비밀번호 구분
