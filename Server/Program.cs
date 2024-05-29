@@ -23,7 +23,7 @@ namespace Server
                 server = new TcpListener(IPAddress.Any, port);
                 server.Start();
 
-                while(true)
+                while (true)
                 {
                     Console.WriteLine("Waiting for a connection...");
                     TcpClient client = server.AcceptTcpClient();
@@ -47,7 +47,7 @@ namespace Server
             Console.WriteLine("\n Enter를 눌러주세요.");
             Console.Read();
         }
-        
+
         // 서버 로그인 처리 함수
         static void HandleClient(object obj)
         {
@@ -66,84 +66,85 @@ namespace Server
             {
                 string username = parts[1];
                 string password = parts[2];
-                
+
                 string response = ValidateLogin(username, password) ? "Login Success" : "Login Failed";
-                Console.WriteLine("Sending response: " + response);                
+                Console.WriteLine("Sending response: " + response);
                 byte[] responseBytes = Encoding.UTF8.GetBytes(response);
                 stream.Write(responseBytes, 0, responseBytes.Length);
 
-            client.Close();
-        }
+                client.Close();
+            }
 
-        // csv 파일 읽어내는 함수.
-        // ","로 아이디, 비밀번호 구분
-        static void LoadUsersFromCSV(string path)
-        {
-            if(File.Exists(path))
+            // csv 파일 읽어내는 함수.
+            // ","로 아이디, 비밀번호 구분
+        }
+            static void LoadUsersFromCSV(string path)
             {
-                Console.WriteLine($"Loading users from {path}...");
-                var lines = File.ReadAllLines(path);
-                foreach(var line in lines)
+                if (File.Exists(path))
                 {
-                    var parts = line.Split(',');
-                    if(parts.Length == 2)
+                    Console.WriteLine($"Loading users from {path}...");
+                    var lines = File.ReadAllLines(path);
+                    foreach (var line in lines)
                     {
-                        string username = parts[0].Trim();
-                        string password = parts[1].Trim();
-                        users[username] = password;
-                        Console.WriteLine($"Loaded user: {username}");
+                        var parts = line.Split(',');
+                        if (parts.Length == 2)
+                        {
+                            string username = parts[0].Trim();
+                            string password = parts[1].Trim();
+                            users[username] = password;
+                            Console.WriteLine($"Loaded user: {username}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Invalid line format: {line}");
+                        }
                     }
-                    else
+                    Console.WriteLine("Users loaded from CSV:");  // 디버그 메시지 추가
+                    foreach (var user in users)
                     {
-                        Console.WriteLine($"Invalid line format: {line}");
+                        Console.WriteLine($"Username: {user.Key}, Password: {user.Value}");
                     }
                 }
-                Console.WriteLine("Users loaded from CSV:");  // 디버그 메시지 추가
-                foreach (var user in users)
+                else
                 {
-                    Console.WriteLine($"Username: {user.Key}, Password: {user.Value}");
+                    Console.WriteLine($"File not found: {path}");
                 }
             }
-            else
+
+            // 아이디, 비밀번호를 찾아내는 함수
+            static bool ValidateLogin(string username, string password)
             {
-                Console.WriteLine($"File not found: {path}");
+                if (users.ContainsKey(username))
+                {
+                    Console.WriteLine($"Validating user: {username}");
+                    return users[username] == password;
+                }
+                return false;
             }
-        }
-
-        // 아이디, 비밀번호를 찾아내는 함수
-        static bool ValidateLogin(string username, string password)
-        {
-            if (users.ContainsKey(username))
+            static bool AddUserToCSV(string id, string password)
             {
-                Console.WriteLine($"Validating user: {username}");
-                return users[username] == password;
+                try
+                {
+                    string path = "users.csv";
+                    if (users.ContainsKey(id))
+                    {
+                        Console.WriteLine("이미 존재하는 ID입니다.");
+                        return false;
+                    }
+
+                    using (StreamWriter sw = new StreamWriter(path, true))
+                    {
+                        sw.WriteLine($"{id},{password}");
+                    }
+
+                    users[id] = password;  // 메모리 내 사용자 데이터도 업데이트
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"오류 발생: {ex.Message}");
+                    return false;
+                }
             }
-            return false;
-        }
-        static bool AddUserToCSV(string id, string password)
-        {
-           try
-           {
-               string path = "users.csv";
-               if (users.ContainsKey(id))
-               {
-                   Console.WriteLine("이미 존재하는 ID입니다.");
-                   return false;
-               }
-
-               using (StreamWriter sw = new StreamWriter(path, true))
-               {
-                   sw.WriteLine($"{id},{password}");
-               }
-
-               users[id] = password;  // 메모리 내 사용자 데이터도 업데이트
-               return true;
-           }
-           catch (Exception ex)
-           {
-               Console.WriteLine($"오류 발생: {ex.Message}");
-               return false;
-           }
         }
     }
-}
