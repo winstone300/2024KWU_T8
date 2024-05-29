@@ -152,3 +152,20 @@ C:\Users\shs21\source\repos\2024KWU_T8(Socket1)\oss_rythm\oss_rythm\obj\Debug\os
 C:\Users\shs21\source\repos\2024KWU_T8(Socket1)\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
 C:\Users\shs21\source\repos\2024KWU_T8(Socket1)\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
 C:\Users\shs21\source\repos\2024KWU_T8(Socket1)\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Register.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe.config
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.exe
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\bin\Debug\oss_rythm.pdb
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.AssemblyReference.cache
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\Interop.WMPLib.dll
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.ResolveComReference.cache
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Custom.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Form1.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Login.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pause.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Properties.Resources.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Register.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Start.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.GenerateResource.cache
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb

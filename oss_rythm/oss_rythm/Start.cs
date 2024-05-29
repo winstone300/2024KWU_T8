@@ -16,7 +16,7 @@ namespace oss_rythm
 
         private WindowsMediaPlayer _media;
         Custom custom;
-        public Start()
+        public Start(Form parent)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;

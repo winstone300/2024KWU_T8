@@ -14,6 +14,8 @@ namespace oss_rythm
 {
     public partial class Login : Form
     {
+        Start start;
+
         private TcpClient client;
         private NetworkStream stream;
         private bool isPasswordPlaceholder = true; // 비밀번호 필드가 placeholder 상태인지 확인
@@ -134,10 +136,9 @@ namespace oss_rythm
 
                 if (response == "Login Success")
                 {
-                    this.Hide();
-                    Start startForm = new Start();
-                    startForm.ShowDialog();
-                    this.Close();
+                    start = new Start(this);
+                    start.Show();
+                    this.Visible = false;
                 }
 
                 else
