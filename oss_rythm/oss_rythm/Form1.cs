@@ -15,9 +15,10 @@ namespace oss_rythm
 {
     public partial class Form1 : Form
     {
-        pause pause;
+        private pause pauseForm;
         WindowsMediaPlayer _media;
-        Form parent;
+        private Form parent;
+        private Custom customForm;
         private Timer gameTimer = new Timer();
         private List<Panel> notes = new List<Panel>();
         private Dictionary<Panel, bool> keyHoldStatus = new Dictionary<Panel, bool>();
@@ -43,7 +44,7 @@ namespace oss_rythm
         // 효과음 재생을 위한 WindowsMediaPlayer
         private WindowsMediaPlayer effectSound; 
 
-        public Form1(WindowsMediaPlayer media, Form parent,double bpm, int mode)
+        public Form1(WindowsMediaPlayer media, Form parent,double bpm, int mode, Custom customForm) // 변수 검토 예정
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace oss_rythm
             this.KeyPreview = true; // 키 입력을 폼에서 미리 처리하도록 설정
             _media = media;
             this.parent = parent;
-
+            this.customForm = customForm; // +++
             // Initialize skipNext dictionary for each bar
             skipNext[bar1] = 0;
             skipNext[bar2] = 0;
@@ -283,15 +284,25 @@ namespace oss_rythm
         private void btnStop_Click(object sender, EventArgs e)
         {
             gameTimer.Stop(); // 게임 타이머 중지
-            pause = new pause(_media, this, parent);
-            pause.TopLevel = true;
-            pause.Changed += new EventHandler(Music_Play); // Changed 이벤트 핸들러 추가
-            pause.Show();
-            pause.BringToFront(); // pause 창을 최상단으로 이동
-            pause.TopMost = true; // pause 창을 최상단에 유지
+            pauseForm = new pause(_media, this, parent);
+            pauseForm.TopLevel = true;
+            pauseForm.Changed += PauseForm_Changed;
+            pauseForm.Show();
+            pauseForm.BringToFront();
+            pauseForm.TopMost = true;
             _media.controls.pause();
+
             btnStop.Enabled = false;
             btnStop.Visible = false;
+        }
+
+        private void PauseForm_Changed(object sender, EventArgs e)
+        {
+            if (customForm != null && !customForm.IsDisposed)
+            {
+                customForm.UpdateListViewWithGameResults(combo, totalScore);
+                customForm.SaveListBoxItems();
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)

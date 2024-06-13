@@ -45,9 +45,14 @@
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.BpmLoding = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.labelSelect = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -225,16 +230,6 @@
             this.BpmLoding.TabIndex = 14;
             this.BpmLoding.Text = ".";
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.HorizontalScrollbar = true;
-            this.listBox1.ItemHeight = 18;
-            this.listBox1.Location = new System.Drawing.Point(970, 123);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(357, 328);
-            this.listBox1.TabIndex = 15;
-            // 
             // labelSelect
             // 
             this.labelSelect.AutoSize = true;
@@ -256,6 +251,42 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader5});
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(970, 123);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(357, 327);
+            this.listView1.TabIndex = 18;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "파일명";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "BPM";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "점수";
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "콤보";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "난이도";
+            // 
             // Custom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
@@ -263,9 +294,9 @@
             this.BackgroundImage = global::oss_rythm.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1396, 690);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.labelSelect);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.BpmLoding);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.webBrowser1);
@@ -305,8 +336,13 @@
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label BpmLoding;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label labelSelect;
         private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }

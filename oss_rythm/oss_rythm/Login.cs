@@ -109,8 +109,16 @@ namespace oss_rythm
 
             string username = txtUsername.Text;
             string password = txtPassword.Text;
-
+            if (string.IsNullOrEmpty(username))
+            {
+                MessageBox.Show("Please enter a user ID.");
+                return;
+            }
             clientLogin(username, password);
+            Custom customForm = new Custom(username, this);
+            customForm.Show();
+            this.Hide();
+
         }
 
         // 서버와 통신을 처리하는 함수
