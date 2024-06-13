@@ -299,7 +299,7 @@ namespace oss_rythm
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, true);
-            effectSound.settings.volume = 10;
+            effectSound.settings.volume = 50;
 
             //그라데이션 효과 추가
             if (e.KeyCode == Keys.Q) ApplyGradientEffect(bar1);
