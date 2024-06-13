@@ -33,6 +33,10 @@ namespace oss_rythm
         private int countTarget = 1;
         private long startTime;
         private double totalScore = 0.0; // 총 점수 변수 추가
+        private bool press1 = true;
+        private bool press2 = true;
+        private bool press3 = true;
+        private bool press4 = true;
 
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
@@ -300,12 +304,41 @@ namespace oss_rythm
         {
             HandleKeyPress(e.KeyCode, true);
             effectSound.settings.volume = 50;
-
+            
             //그라데이션 효과 추가
-            if (e.KeyCode == Keys.Q) ApplyGradientEffect(bar1);
-            if (e.KeyCode == Keys.W) ApplyGradientEffect(bar2);
-            if (e.KeyCode == Keys.E) ApplyGradientEffect(bar3);
-            if (e.KeyCode == Keys.R) ApplyGradientEffect(bar4);
+            if (e.KeyCode == Keys.Q)
+            {
+                if (press1 == true)
+                {
+                    ApplyGradientEffect(bar1);
+                    press1 = false;
+                }
+            }
+            if (e.KeyCode == Keys.W)
+            {
+                if (press2 == true)
+                {
+                    ApplyGradientEffect(bar2);
+                    press2 = false;
+                }
+            }
+            if (e.KeyCode == Keys.E)
+            {
+                if (press3 == true)
+                {
+                    ApplyGradientEffect(bar3);
+                    press3 = false;
+                }
+            }
+            if (e.KeyCode == Keys.R)
+            {
+                if (press4 == true)
+                {
+                    ApplyGradientEffect(bar4);
+                    press4 = false;
+                }
+            }
+
         }
         private void PlayKeyPressSound()
         {
@@ -316,18 +349,32 @@ namespace oss_rythm
             effectSound.controls.play();
         }
 
-
-
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, false);
             effectSound.settings.volume = 0;
 
             //그라데이션 효과 제거
-            if (e.KeyCode == Keys.Q) RemoveGradientEffect(bar1);
-            if (e.KeyCode == Keys.W) RemoveGradientEffect(bar2);
-            if (e.KeyCode == Keys.E) RemoveGradientEffect(bar3);
-            if (e.KeyCode == Keys.R) RemoveGradientEffect(bar4);
+            if (e.KeyCode == Keys.Q)
+            {
+                RemoveGradientEffect(bar1);
+                press1 = true;
+            }
+            if (e.KeyCode == Keys.W)
+            {
+                RemoveGradientEffect(bar2);
+                press2 = true;
+            }
+            if (e.KeyCode == Keys.E)
+            {
+                RemoveGradientEffect(bar3);
+                press3 = true;
+            }
+            if (e.KeyCode == Keys.R)
+            {
+                RemoveGradientEffect(bar4);
+                press4 = true;
+            }
         }
 
         //효과 추가 및 제거 코드
@@ -340,6 +387,7 @@ namespace oss_rythm
         private void RemoveGradientEffect(Panel bar)
         {
             bar.Paint -= new PaintEventHandler(Bar_Paint);
+            bar.BackColor = SystemColors.Control; // 기본 배경색으로 설정
             bar.Invalidate();
         }
 
@@ -359,6 +407,7 @@ namespace oss_rythm
                 e.Graphics.FillRectangle(brush, new Rectangle(0, (int)(bar.Height * 0.8), bar.Width, (int)(bar.Height * 0.2)));
             }
         }
+
 
         private void Btn_MouseDown(object sender, MouseEventArgs e)
         {
@@ -536,5 +585,6 @@ namespace oss_rythm
         {
             // 아무 것도 하지 않음
         }
+
     }
 }
