@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -175,6 +176,8 @@ namespace oss_rythm
             }
         }
 
+
+
         // 각 bar에 노트를 생성하는 메서드
         private void CreateNotes()
         {
@@ -296,7 +299,13 @@ namespace oss_rythm
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             HandleKeyPress(e.KeyCode, true);
-            effectSound.settings.volume = 20;
+            effectSound.settings.volume = 10;
+
+            //그라데이션 효과 추가
+            if (e.KeyCode == Keys.Q) ApplyGradientEffect(bar1);
+            if (e.KeyCode == Keys.W) ApplyGradientEffect(bar2);
+            if (e.KeyCode == Keys.E) ApplyGradientEffect(bar3);
+            if (e.KeyCode == Keys.R) ApplyGradientEffect(bar4);
         }
         private void PlayKeyPressSound()
         {
@@ -304,6 +313,7 @@ namespace oss_rythm
             string relativePath = "long_effect_g6_10min.wav"; // 상대 경로
             string fullPath = System.IO.Path.Combine(basePath, relativePath);
             effectSound.URL = fullPath;
+            effectSound.controls.play();
         }
 
 
@@ -312,6 +322,42 @@ namespace oss_rythm
         {
             HandleKeyPress(e.KeyCode, false);
             effectSound.settings.volume = 0;
+
+            //그라데이션 효과 제거
+            if (e.KeyCode == Keys.Q) RemoveGradientEffect(bar1);
+            if (e.KeyCode == Keys.W) RemoveGradientEffect(bar2);
+            if (e.KeyCode == Keys.E) RemoveGradientEffect(bar3);
+            if (e.KeyCode == Keys.R) RemoveGradientEffect(bar4);
+        }
+
+        //효과 추가 및 제거 코드
+        private void ApplyGradientEffect(Panel bar)
+        {
+            bar.Paint += new PaintEventHandler(Bar_Paint);
+            bar.Invalidate();
+        }
+
+        private void RemoveGradientEffect(Panel bar)
+        {
+            bar.Paint -= new PaintEventHandler(Bar_Paint);
+            bar.Invalidate();
+        }
+
+        //그라데이션 설정
+        private void Bar_Paint(object sender, PaintEventArgs e)
+        {
+            Panel bar = sender as Panel;
+            if (bar != null)
+            {
+                LinearGradientBrush brush = new LinearGradientBrush(
+                    //색칠할 영역 및 속성값 생성
+                    new Rectangle(0, (int)(bar.Height * 0.8), bar.Width, (int)(bar.Height * 0.2)),
+                    Color.Transparent,
+                    Color.Green,
+                    LinearGradientMode.Vertical);
+                //색칠
+                e.Graphics.FillRectangle(brush, new Rectangle(0, (int)(bar.Height * 0.8), bar.Width, (int)(bar.Height * 0.2)));
+            }
         }
 
         private void Btn_MouseDown(object sender, MouseEventArgs e)

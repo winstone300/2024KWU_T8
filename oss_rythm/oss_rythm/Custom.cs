@@ -101,11 +101,24 @@ namespace oss_rythm
                     var bpmMatch = Regex.Match(selectedTitle, @"\(BPM: (\d+(\.\d+)?)\)");
                     if (bpmMatch.Success)
                     {
+                        if (_media == null)
+                        {
+                            _media = new WindowsMediaPlayer();
+                        }
+                        _media.URL = filePath;
+                        _media.controls.stop();
                         lblBpmInfo.Text = bpmMatch.Groups[1].Value;
+                        bpm = int.Parse(bpmMatch.Groups[1].Value);
+                        progressBar1.Value = 100;
+                        progressPercentage = 100; 
+                        BpmLoding.Text = "BPM 추출 완료";
                     }
                     else
                     {
-                        lblBpmInfo.Text = " ";
+                        lblBpmInfo.Text = "0";
+                        progressBar1.Value = 0;
+                        progressPercentage = 0;
+                        BpmLoding.Text = "...";
                     }
                 }
             }

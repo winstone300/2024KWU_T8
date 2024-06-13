@@ -169,3 +169,5 @@ C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클�
 C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
 C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
 C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\8조_클라이언트\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
+C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Login.resources
+C:\Users\정승현\새 폴더\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Register.resources
