@@ -115,10 +115,6 @@ namespace oss_rythm
                 return;
             }
             clientLogin(username, password);
-            Custom customForm = new Custom(username, this);
-            customForm.Show();
-            this.Hide();
-
         }
 
         // 서버와 통신을 처리하는 함수
@@ -144,20 +140,20 @@ namespace oss_rythm
 
                 if (response == "Login Success")
                 {
-                    start = new Start(this);
-                    start.Show();
-                    this.Visible = false;
+                    Start startForm = new Start(username,this);
+                    startForm.Show();
+                    this.Hide();
                 }
 
                 else
                 {
-                    lblStatus.Location = new Point(250, 240);
+                    lblStatus.Location = new Point(235, 160);
                     lblStatus.Text = "해당하는 ID가 없습니다. 다시 입력해주세요.";
                 }
             }
             catch (SocketException ex)
             {
-                lblStatus.Location = new Point(300, 240);
+                lblStatus.Location = new Point(280, 160);
                 lblStatus.Text = "서버에 연결할 수 없습니다.";
             }
 
