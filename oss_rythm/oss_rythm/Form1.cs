@@ -42,9 +42,9 @@ namespace oss_rythm
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
         // 효과음 재생을 위한 WindowsMediaPlayer
-        private WindowsMediaPlayer effectSound; 
+        private WindowsMediaPlayer effectSound;
 
-        public Form1(WindowsMediaPlayer media, Form parent,double bpm, int mode, Custom customForm) // 변수 검토 예정
+        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm) // 변수 검토 예정
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -76,7 +76,7 @@ namespace oss_rythm
             // Register KeyDown and KeyUp event handlers
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
             this.KeyUp += new KeyEventHandler(Form1_KeyUp);
-            this.mode = mode; 
+            this.mode = mode;
             //특수 효과음
             effectSound = new WindowsMediaPlayer();
             effectSound.settings.volume = 0;
@@ -181,8 +181,6 @@ namespace oss_rythm
             }
         }
 
-
-
         // 각 bar에 노트를 생성하는 메서드
         private void CreateNotes()
         {
@@ -194,7 +192,7 @@ namespace oss_rythm
         }
 
         // 특정 bar에 노트를 생성하는 메서드
-        private void CreateNoteInBar(Panel bar,int blockHeight,int blockType)
+        private void CreateNoteInBar(Panel bar, int blockHeight, int blockType)
         {
             Panel note = new Panel
             {
@@ -212,9 +210,9 @@ namespace oss_rythm
         }
 
         //난이도에 맞춰 노드 생성 메서드 호출
-        private void Set_Mode(Panel bar, bool exclude,int mode)
+        private void Set_Mode(Panel bar, bool exclude, int mode)
         {
-            if(mode == 0)
+            if (mode == 0)
             {
                 if (!exclude || skipNext[bar] > 0)
                 {
@@ -228,9 +226,9 @@ namespace oss_rythm
                 int blockType = random.Next(1, 5);
                 int blockHeight = blockType == 1 ? 30 : blockType == 2 ? 30 : blockType == 3 ? 30 : blockType == 4 ? 30 : 0;
 
-                CreateNoteInBar (bar,blockHeight,blockType);
+                CreateNoteInBar(bar, blockHeight, blockType);
             }
-            else if(mode == 1)
+            else if (mode == 1)
             {
                 if (!exclude || skipNext[bar] > 0)
                 {
@@ -284,20 +282,27 @@ namespace oss_rythm
         private void btnStop_Click(object sender, EventArgs e)
         {
             gameTimer.Stop(); // 게임 타이머 중지
+            _media.controls.pause(); // 음악 일시정지
+
             pauseForm = new pause(_media, this, parent);
             pauseForm.TopLevel = true;
             pauseForm.Changed += PauseForm_Changed;
             pauseForm.Show();
             pauseForm.BringToFront();
             pauseForm.TopMost = true;
-            _media.controls.pause();
 
-            btnStop.Enabled = false;
-            btnStop.Visible = false;
+            btnStop.Enabled = false; // Pause 버튼 비활성화
+            btnStop.Visible = false; // Pause 버튼 숨기기
         }
 
         private void PauseForm_Changed(object sender, EventArgs e)
         {
+            _media.controls.play(); // 음악 재생
+            gameTimer.Start(); // 게임 타이머 시작
+
+            btnStop.Enabled = true; // Pause 버튼 다시 활성화
+            btnStop.Visible = true; // Pause 버튼 다시 보이기
+
             if (customForm != null && !customForm.IsDisposed)
             {
                 customForm.UpdateListViewWithGameResults(combo, totalScore);
@@ -315,7 +320,7 @@ namespace oss_rythm
         {
             HandleKeyPress(e.KeyCode, true);
             effectSound.settings.volume = 50;
-            
+
             //그라데이션 효과 추가
             if (e.KeyCode == Keys.Q)
             {

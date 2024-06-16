@@ -30,7 +30,8 @@ namespace oss_rythm
 
         private void btnContinue_Click(object sender, EventArgs e)
         {
-            Changed(this, new EventArgs());
+            _media.controls.play(); // 음악 재생
+            Changed?.Invoke(this, EventArgs.Empty); // 이벤트 발생
             this.Close();
         }
 
