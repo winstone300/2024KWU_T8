@@ -17,6 +17,7 @@ namespace oss_rythm
         string username;
         Form parent;
         Start start;
+        Custom custom;
 
         public ScoreBoard(Form parent,double totalscore, int maxcombo,string username)
         {
@@ -38,7 +39,8 @@ namespace oss_rythm
         private void btnStart_Click(object sender, EventArgs e)
         {
             start = new Start(username, parent);
-            start.Show();
+            custom = new Custom(username, start);
+            custom.Show();
             this.Close();
         }
     }
