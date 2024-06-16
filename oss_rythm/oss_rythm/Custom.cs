@@ -247,7 +247,7 @@ namespace oss_rythm
                 MessageBox.Show("BPM 추출 중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            form1 = new Form1(_media, this, bpm, mode, this);
+            form1 = new Form1(_media, this, bpm, mode, this,username);
             form1.Show();
             SaveListBoxItems();
             _media.controls.play();

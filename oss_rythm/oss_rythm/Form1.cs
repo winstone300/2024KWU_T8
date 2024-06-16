@@ -23,8 +23,11 @@ namespace oss_rythm
         private List<Panel> notes = new List<Panel>();
         private Dictionary<Panel, bool> keyHoldStatus = new Dictionary<Panel, bool>();
         private Dictionary<Panel, bool> hitStatus = new Dictionary<Panel, bool>();
+        private ScoreBoard ScoreBoard;
+        private string username;
 
         private int combo = 0;
+        private int maxcombo = 0;
         private int mode;
         private int perfectCount = 0;
         private int goodCount = 0;
@@ -44,7 +47,7 @@ namespace oss_rythm
         // 효과음 재생을 위한 WindowsMediaPlayer
         private WindowsMediaPlayer effectSound;
 
-        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm) // 변수 검토 예정
+        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm,string username) // 변수 검토 예정
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -54,8 +57,10 @@ namespace oss_rythm
             this.FormBorderStyle = FormBorderStyle.None;
             this.KeyPreview = true; // 키 입력을 폼에서 미리 처리하도록 설정
             _media = media;
+            _media.PlayStateChange += new _WMPOCXEvents_PlayStateChangeEventHandler(Media_PlayStateChange);
             this.parent = parent;
             this.customForm = customForm; // +++
+            this.username = username;
             // Initialize skipNext dictionary for each bar
             skipNext[bar1] = 0;
             skipNext[bar2] = 0;
@@ -105,8 +110,8 @@ namespace oss_rythm
             btnR.MouseUp += Btn_MouseUp;
 
             // Initialize labels (폼 디자이너에서 이미 추가된 레이블 사용)
-            label1.Text = "Combo: 0";
-            label2.Text = "Score: 0.0";
+            label1.Text = "Combo: 0\nScore: 0.0\nMax Combo: 0";
+            label2.Text = "";
         }
 
         // 게임 타이머 틱 이벤트 핸들러
@@ -125,6 +130,7 @@ namespace oss_rythm
             foreach (Panel note in notes.ToList())
             {
                 note.Top += 5; // 노트의 위치를 아래로 이동
+                if (note.Parent == null) continue;
                 if (note.Top > note.Parent.Height)
                 {
                     if (note.Height > 0)
@@ -145,6 +151,7 @@ namespace oss_rythm
                             {
                                 perfectCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 1.0;
                                 label2.Text = "Perfect!"; // Perfect 판정
                                 label2.ForeColor = Color.Green;
@@ -153,6 +160,7 @@ namespace oss_rythm
                             {
                                 goodCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 0.5;
                                 label2.Text = "Good!"; // Good 판정
                                 label2.ForeColor = Color.Blue;
@@ -172,7 +180,7 @@ namespace oss_rythm
                             label2.Text = "Miss!"; // Miss 판정
                             label2.ForeColor = Color.Red;
                         }
-                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
 
                         notes.Remove(note); // 리스트에서 노트 제거
                         note.Dispose(); // 노트 자원 해제
@@ -518,6 +526,7 @@ namespace oss_rythm
                                 hitStatus[targetBar] = true;
                                 perfectCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 1.0;
                                 label2.Text = "Perfect!"; // Perfect 판정
                                 label2.ForeColor = Color.Green;
@@ -527,6 +536,7 @@ namespace oss_rythm
                                 hitStatus[targetBar] = true;
                                 goodCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 0.5;
                                 label2.Text = "Good!"; // Good 판정
                                 label2.ForeColor = Color.Blue;
@@ -539,7 +549,7 @@ namespace oss_rythm
                                 label2.ForeColor = Color.Red;
                             }
 
-                            label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+                            label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
                             notes.Remove(note); // 리스트에서 노트 제거
                             note.Dispose(); // 노트 자원 해제
                             break;
@@ -563,6 +573,7 @@ namespace oss_rythm
                             {
                                 perfectCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 1.0;
                                 label2.Text = "Perfect!"; // Perfect 판정
                                 label2.ForeColor = Color.Green;
@@ -574,6 +585,7 @@ namespace oss_rythm
                             {
                                 goodCount++;
                                 combo++;
+                                if (combo > maxcombo) maxcombo = combo;
                                 totalScore += 0.5;
                                 label2.Text = "Good!"; // Good 판정
                                 label2.ForeColor = Color.Blue;
@@ -587,7 +599,7 @@ namespace oss_rythm
                             label2.ForeColor = Color.Red;
                         }
 
-                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore; // 콤보와 점수 업데이트
+                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
                         notes.Remove(note); // 리스트에서 노트 제거
                         note.Dispose(); // 노트 자원 해제
                         break;
@@ -596,7 +608,16 @@ namespace oss_rythm
                 hitStatus[targetBar] = false; // 다음 노트를 위해 hit 상태 초기화
             }
         }
-
+        private void Media_PlayStateChange(int NewState)
+        {
+            // 음악 재생 종료시
+            if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsMediaEnded)
+            {
+                ScoreBoard = new ScoreBoard(parent,totalScore, maxcombo,username);
+                ScoreBoard.Show();
+                this.Close();
+            }
+        }
         private void label1_Click(object sender, EventArgs e)
         {
             // 아무 것도 하지 않음
