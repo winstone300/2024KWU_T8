@@ -41,13 +41,14 @@ namespace oss_rythm
         private bool press2 = true;
         private bool press3 = true;
         private bool press4 = true;
+        string title;
 
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
         // 효과음 재생을 위한 WindowsMediaPlayer
         private WindowsMediaPlayer effectSound;
 
-        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm,string username) // 변수 검토 예정
+        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm,string username,string title) // 변수 검토 예정
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -61,6 +62,7 @@ namespace oss_rythm
             this.parent = parent;
             this.customForm = customForm; // +++
             this.username = username;
+            this.title = title;
             // Initialize skipNext dictionary for each bar
             skipNext[bar1] = 0;
             skipNext[bar2] = 0;
@@ -663,7 +665,7 @@ namespace oss_rythm
 
                 // Calculate the rank of the current user
                 int rank = scoreList.FindIndex(row => row.Field<string>("Username") == username) + 1;
-                ScoreBoard = new ScoreBoard(parent, totalScore, maxcombo, username, rank);
+                ScoreBoard = new ScoreBoard(this, totalScore, maxcombo, username, rank,title,bpm);
                 ScoreBoard.Show();
                 this.Close();
             }

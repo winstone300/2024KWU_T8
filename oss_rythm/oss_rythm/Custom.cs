@@ -12,6 +12,46 @@ namespace oss_rythm
 {
     public partial class Custom : Form
     {
+        private bool DesignMode
+        {
+            get
+            {
+                return (System.ComponentModel.LicenseManager.UsageMode == System.ComponentModel.LicenseUsageMode.Designtime);
+            }
+        }
+
+        public class Song : DataSet
+        {
+            public Song()
+            {
+                if (DesignMode)
+                    return;
+
+                DataTable songTable = new DataTable("Song");
+
+                // 'name' 열 추가
+                DataColumn nameColumn = songTable.Columns.Add("name", typeof(string));
+                nameColumn.AllowDBNull = false; // 기본 키는 null일 수 없습니다.
+
+                // 'title' 열 추가
+                songTable.Columns.Add("title", typeof(string));
+
+                // 'bpm' 열 추가
+                songTable.Columns.Add("bpm", typeof(double));
+
+                // 'score' 열 추가
+                songTable.Columns.Add("score", typeof(double));
+
+                // 'path' 열 추가
+                songTable.Columns.Add("path", typeof(string));
+
+
+                // 테이블을 데이터셋에 추가
+                this.Tables.Add(songTable);
+            }
+        }
+
+        Song song;
         private WindowsMediaPlayer _media; // 음악 재생을 위한 미디어 플레이어
         int progressPercentage; // 진행률 퍼센티지
         int mode = 1; // 게임 모드 (0: Easy, 1: Normal, 2: Hard)
@@ -25,6 +65,8 @@ namespace oss_rythm
         private Dictionary<string, (string FilePath, double Bpm)> musicFiles; // 음악 파일 경로와 BPM을 저장하는 딕셔너리
         private bool isFileLoading = false; // 파일 로딩 중인지 확인하는 플래그
         private string username; // 사용자 이름
+        string filePath;
+        string title;
 
         // Custom 생성자
         public Custom(string username, Form parent)
@@ -44,12 +86,49 @@ namespace oss_rythm
             webBrowser1.ProgressChanged += webBrowser1_ProgressChanged;
             webBrowser1.DocumentCompleted += webBrowser1_DocumentCompleted;
             musicFiles = new Dictionary<string, (string FilePath, double Bpm)>();
-            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
 
+            song = new Song();
+            // exe 파일이 있는 디렉토리를 기준으로 파일 경로 설정
+            filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dataset.xml");
+            LoadDataSetFromFile(filePath);      //기존 경로에 dataset존재시 불러옴
             LoadListBoxItems(); // 저장된 음악 파일 목록 로드
+            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             labelSelect.BackColor = Color.Transparent; // 레이블 배경 투명 설정
         }
 
+        //dataset불러오기
+        private void LoadDataSetFromFile(string filePath)
+        {
+            if (System.IO.File.Exists(filePath))
+            {
+                song = new Song();
+                song.ReadXml(filePath);
+            }
+        }
+        //username에 맞는 data가져오기
+        private void getInfo(string nameToSearch)
+        {
+
+            // 특정 이름을 가진 사람들을 검색
+            DataRow[] foundRows = song.Tables["Song"].Select($"name = '{nameToSearch}'");
+
+            // 찾은 사람들의 정보를 처리
+            if (foundRows.Length > 0)
+            {
+                foreach (DataRow foundRow in foundRows)
+                {
+                    string title = (string)foundRow["title"];
+                    double bpm = (double)foundRow["bpm"];
+                    double score = (double)foundRow["score"];
+
+                    var listViewItem = new ListViewItem(title); // 06-17
+                    listViewItem.SubItems.Add(bpm.ToString());
+                    listViewItem.SubItems.Add(score.ToString());
+                    listView1.Items.Add(listViewItem);
+                }
+            }
+
+        }
         // OpenFileDialog 초기 설정
         private void InitializeOpenFileDialog()
         {
@@ -76,13 +155,15 @@ namespace oss_rythm
                 string pattern = @"^(.+)\.[^.]+$";
                 string RefileName = Regex.Replace(fileName, pattern, "$1");
                 lblTitleInfo.Text = RefileName;
+                title = RefileName; 
 
+                /*
                 if (!musicFiles.ContainsKey(RefileName))
                 {
                     listView1.Items.Add(RefileName);
                     musicFiles[RefileName] = (ofd.FileName, 0.0);
                 }
-
+                */
                 isFileLoading = true; // 파일 로딩 플래그 설정
                 string url = "https://songdata.io/search?query=" + RefileName;
                 webBrowser1.Navigate(url);
@@ -111,6 +192,7 @@ namespace oss_rythm
 
                     if (musicFiles[titleOnly].Bpm > 0)
                     {
+                        title = titleOnly;
                         bpm = musicFiles[titleOnly].Bpm;
                         lblBpmInfo.Text = bpm.ToString();
                         progressBar1.Value = 100;
@@ -228,6 +310,23 @@ namespace oss_rythm
                     bpm = double.Parse(element.InnerText.Trim());
                     lblBpmInfo.Text = element.InnerText.Trim();
                     UpdateListBoxWithBpm(lblTitleInfo.Text, bpm);
+                    // 특정 이름을 가진 사람들을 검색합니다.
+                    DataRow[] foundRows = song.Tables["Song"].Select($"title = '{title}'");
+
+                    // 
+                    if (foundRows.Length == 0)
+                    {
+                        //data set 추가
+                        song.Tables["Song"].Rows.Add(new object[] {
+                      username, title,bpm,0,ofd.FileName
+                 });
+                        song.WriteXml(filePath);
+                    }
+                    else
+                    {
+                        foundRows[0]["bpm"] = bpm;
+                        song.WriteXml(filePath);
+                    }
                     return;
                 }
             }
@@ -273,7 +372,7 @@ namespace oss_rythm
             }
             if (speed == 1.5) bpm = bpm * 1.5;
             if (speed == 2.0) bpm = bpm * 2.0;
-            form1 = new Form1(_media, this, bpm, mode, this,username);
+            form1 = new Form1(_media, this, bpm, mode, this,username,title);
             form1.Show();
             SaveListBoxItems();
             _media.settings.rate = speed; //재생속도로 음악 재생
@@ -349,7 +448,9 @@ namespace oss_rythm
         private void LoadListBoxItems()
         {
             // listView1.Items.Clear();
-            LoadMusicFiles();
+            //LoadMusicFiles();
+            getInfo(username);
+
         }
 
         // 폼 로드 이벤트 핸들러
@@ -519,6 +620,12 @@ namespace oss_rythm
             btnEasy.Text = "X 1.0";
             btnNormal.Text = "X 1.5";
             btnHard.Text = "X 2.0";
+        }
+
+        private void Custom_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //종료시 dataset 업데이트
+            song.WriteXml(filePath);
         }
     }
 }
