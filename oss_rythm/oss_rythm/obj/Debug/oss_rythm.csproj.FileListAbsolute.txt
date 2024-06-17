@@ -258,3 +258,6 @@ C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.c
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Login.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Register.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.ScoreBoard.resources
