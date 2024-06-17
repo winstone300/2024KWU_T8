@@ -258,3 +258,7 @@ C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.c
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.csproj.CoreCompileInputs.cache
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.exe
 C:\Users\shs21\Source\Repos\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.pdb
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Login.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.Register.resources
+C:\Users\rlago\Source\Repos\winstone300\2024KWU_T8\oss_rythm\oss_rythm\obj\Debug\oss_rythm.ScoreBoard.resources
+C:\Users\eivy1\OneDrive\바탕 화면\3-1\응용소프트웨어실습\최종_최종_클라이언트\oss_rythm\oss_rythm\obj\Debug\oss_rythm.ScoreBoard.resources

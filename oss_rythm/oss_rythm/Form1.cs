@@ -36,7 +36,7 @@ namespace oss_rythm
         private double targetTime;
         private int countTarget = 1;
         private long startTime;
-        public double totalScore = 0.0; // 총 점수 변수 추가
+        public double totalScore = 0.0; //총 점수 변수 추가
         private bool press1 = true;
         private bool press2 = true;
         private bool press3 = true;
@@ -199,13 +199,35 @@ namespace oss_rythm
             Set_Mode(bar4, excludePanel == 4, mode);
         }
 
-        // 특정 bar에 노트를 생성하는 메서드
         private void CreateNoteInBar(Panel bar, int blockHeight, int blockType)
         {
+
+            
+              // 블록의 길이에 따른 색상 설정
+              Color blockColor;
+            switch (blockHeight)
+            {
+                case 20:
+                    blockColor = Color.SandyBrown;
+                    break;
+                case 100:
+                    blockColor = Color.SkyBlue;
+                    break;
+                case 200:
+                    blockColor = Color.DarkSeaGreen;
+                    break;
+                case 620:
+                    blockColor = Color.Purple;
+                    break;
+                default:
+                    blockColor = Color.SandyBrown;
+                    break;
+            }
+
             Panel note = new Panel
             {
                 Size = new Size(152, blockHeight),
-                BackColor = Color.Blue,
+                BackColor = blockColor, // 색상 설정
                 Location = new Point(0, 0),
                 Tag = blockType // 블록 타입을 태그로 저장
             };
@@ -216,7 +238,6 @@ namespace oss_rythm
             if (skipNext[bar] == 0)
                 skipNext[bar] = 1;
         }
-
         //난이도에 맞춰 노드 생성 메서드 호출
         private void Set_Mode(Panel bar, bool exclude, int mode)
         {
@@ -248,7 +269,7 @@ namespace oss_rythm
                 }
 
                 int blockType = random.Next(1, 5);
-                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 20 : 0;
+                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 100 : blockType == 3 ? 200 : blockType == 4 ? 20 : 0;
 
                 CreateNoteInBar(bar, blockHeight, blockType);
             }
@@ -264,11 +285,12 @@ namespace oss_rythm
                 }
 
                 int blockType = random.Next(1, 5);
-                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 60 : blockType == 3 ? 100 : blockType == 4 ? 120 : 0;
+                int blockHeight = blockType == 1 ? 20 : blockType == 2 ? 100 : blockType == 3 ? 200 : blockType == 4 ? 620 : 0;
 
                 CreateNoteInBar(bar, blockHeight, blockType);
             }
         }
+
 
         // 음악 재생 메서드
         private void PlayMusic()
