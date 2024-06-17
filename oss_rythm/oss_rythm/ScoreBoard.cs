@@ -18,8 +18,9 @@ namespace oss_rythm
         Form parent;
         Start start;
         Custom custom;
+        int rank; // Add rank field
 
-        public ScoreBoard(Form parent,double totalscore, int maxcombo,string username)
+        public ScoreBoard(Form parent,double totalscore, int maxcombo,string username, int rank)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -28,12 +29,14 @@ namespace oss_rythm
             this.username = username;
             score = totalscore;
             combo = maxcombo;
+            this.rank = rank; // Initialize rank
         }
 
         private void ScoreBoard_Load(object sender, EventArgs e)
         {
             lblCombo.Text = combo.ToString();
             lblScore.Text = score.ToString();
+            lblRank.Text = rank.ToString(); // Display the rank
         }
 
         private void btnStart_Click(object sender, EventArgs e)

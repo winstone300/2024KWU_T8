@@ -27,7 +27,7 @@ namespace oss_rythm
         private string username;
 
         private int combo = 0;
-        private int maxcombo = 0;
+        public int maxcombo = 0;
         private int mode;
         private int perfectCount = 0;
         private int goodCount = 0;
@@ -36,7 +36,7 @@ namespace oss_rythm
         private double targetTime;
         private int countTarget = 1;
         private long startTime;
-        private double totalScore = 0.0; // 총 점수 변수 추가
+        public double totalScore = 0.0; // 총 점수 변수 추가
         private bool press1 = true;
         private bool press2 = true;
         private bool press3 = true;
@@ -313,7 +313,19 @@ namespace oss_rythm
 
             if (customForm != null && !customForm.IsDisposed)
             {
-                customForm.UpdateListViewWithGameResults(combo, totalScore);
+                customForm.UpdateTotalScore(totalScore);
+                customForm.UpdateCombo(maxcombo);
+                customForm.SaveListBoxItems();
+            }
+        }
+
+        private void UpdateLabels()
+        {
+            label1.Text = $"Combo: {combo}\nScore: {totalScore}\nMax Combo: {maxcombo}";
+            if (customForm != null && !customForm.IsDisposed)
+            {
+                customForm.UpdateTotalScore(totalScore);
+                customForm.UpdateCombo(maxcombo);
                 customForm.SaveListBoxItems();
             }
         }
@@ -530,6 +542,7 @@ namespace oss_rythm
                                 totalScore += 1.0;
                                 label2.Text = "Perfect!"; // Perfect 판정
                                 label2.ForeColor = Color.Green;
+                                customForm.SaveListBoxItems();
                             }
                             else if (difference < 200)
                             {
@@ -540,6 +553,7 @@ namespace oss_rythm
                                 totalScore += 0.5;
                                 label2.Text = "Good!"; // Good 판정
                                 label2.ForeColor = Color.Blue;
+                                customForm.SaveListBoxItems();
                             }
                             else
                             {
@@ -550,6 +564,7 @@ namespace oss_rythm
                             }
 
                             label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
+
                             notes.Remove(note); // 리스트에서 노트 제거
                             note.Dispose(); // 노트 자원 해제
                             break;
@@ -577,6 +592,7 @@ namespace oss_rythm
                                 totalScore += 1.0;
                                 label2.Text = "Perfect!"; // Perfect 판정
                                 label2.ForeColor = Color.Green;
+                                
                             }
                         }
                         else if (difference < 200)
@@ -613,7 +629,19 @@ namespace oss_rythm
             // 음악 재생 종료시
             if ((WMPLib.WMPPlayState)NewState == WMPLib.WMPPlayState.wmppsMediaEnded)
             {
-                ScoreBoard = new ScoreBoard(parent,totalScore, maxcombo,username);
+                DataTable scores = DatabaseManager.GetMusicList(username);
+                // Fetch all scores for the current song
+                var songScores = scores.AsEnumerable();
+
+                // Filter for the current song and order by score descending
+                var scoreList = scores.AsEnumerable()
+                    .Where(row => row.Field<string>("FileName") == _media.URL)
+                    .OrderByDescending(row => row.Field<double>("Score"))
+                    .ToList();
+
+                // Calculate the rank of the current user
+                int rank = scoreList.FindIndex(row => row.Field<string>("Username") == username) + 1;
+                ScoreBoard = new ScoreBoard(parent, totalScore, maxcombo, username, rank);
                 ScoreBoard.Show();
                 this.Close();
             }
