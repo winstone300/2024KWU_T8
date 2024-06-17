@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -190,6 +191,23 @@ namespace oss_rythm
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+            foreach (var process in Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName))
+            {
+                try
+                {
+                    if (process.Id != Process.GetCurrentProcess().Id)
+                    {
+                        process.Kill();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"프로세스를 종료할 수 없습니다: {ex.Message}");
+                }
+            }
+
+            // 현재 프로세스를 종료
+            Process.GetCurrentProcess().Kill();
         }
 
         private void btnLogin_Click_1(object sender, EventArgs e)
