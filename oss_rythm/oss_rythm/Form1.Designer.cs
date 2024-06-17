@@ -57,7 +57,7 @@
             // 
             this.btnStop.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.btnStop.BackgroundImage = global::oss_rythm.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(628, 24);
+            this.btnStop.Location = new System.Drawing.Point(566, 24);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(24, 26);
             this.btnStop.TabIndex = 0;
@@ -148,7 +148,7 @@
             this.label1.Font = new System.Drawing.Font("굴림", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.Location = new System.Drawing.Point(558, 117);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 29);
+            this.label1.Size = new System.Drawing.Size(141, 44);
             this.label1.TabIndex = 13;
             this.label1.Text = "label1";
             this.label1.Click += new System.EventHandler(this.label1_Click);
@@ -159,13 +159,13 @@
             this.label2.Font = new System.Drawing.Font("굴림", 33F);
             this.label2.Location = new System.Drawing.Point(555, 234);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(141, 44);
+            this.label2.Size = new System.Drawing.Size(210, 66);
             this.label2.TabIndex = 14;
             this.label2.Text = "label2";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 716);
             this.Controls.Add(this.label2);

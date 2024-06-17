@@ -53,6 +53,12 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.label1 = new System.Windows.Forms.Label();
+            this.RealBmp = new System.Windows.Forms.Label();
+            this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
+            this.SetBlock = new System.Windows.Forms.Button();
+            this.SetSpeed = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,6 +101,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.RealBmp);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.lblBpmInfo);
             this.groupBox1.Controls.Add(this.labelBpm);
             this.groupBox1.Controls.Add(this.lblScoreInfo);
@@ -113,7 +121,7 @@
             // 
             this.lblBpmInfo.AutoSize = true;
             this.lblBpmInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBpmInfo.Location = new System.Drawing.Point(587, 153);
+            this.lblBpmInfo.Location = new System.Drawing.Point(512, 164);
             this.lblBpmInfo.Name = "lblBpmInfo";
             this.lblBpmInfo.Size = new System.Drawing.Size(23, 25);
             this.lblBpmInfo.TabIndex = 5;
@@ -123,7 +131,7 @@
             // 
             this.labelBpm.AutoSize = true;
             this.labelBpm.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBpm.Location = new System.Drawing.Point(481, 153);
+            this.labelBpm.Location = new System.Drawing.Point(406, 164);
             this.labelBpm.Name = "labelBpm";
             this.labelBpm.Size = new System.Drawing.Size(55, 25);
             this.labelBpm.TabIndex = 4;
@@ -287,6 +295,48 @@
             // 
             this.columnHeader5.Text = "난이도";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(586, 164);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(111, 25);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "REAL BMP";
+            // 
+            // RealBmp
+            // 
+            this.RealBmp.AutoSize = true;
+            this.RealBmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RealBmp.Location = new System.Drawing.Point(711, 164);
+            this.RealBmp.Name = "RealBmp";
+            this.RealBmp.Size = new System.Drawing.Size(23, 25);
+            this.RealBmp.TabIndex = 7;
+            this.RealBmp.Text = "0";
+            // 
+            // SetBlock
+            // 
+            this.SetBlock.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetBlock.Location = new System.Drawing.Point(41, 144);
+            this.SetBlock.Name = "SetBlock";
+            this.SetBlock.Size = new System.Drawing.Size(271, 81);
+            this.SetBlock.TabIndex = 22;
+            this.SetBlock.Text = "BLOCK";
+            this.SetBlock.UseVisualStyleBackColor = true;
+            this.SetBlock.Click += new System.EventHandler(this.SetBlock_Click);
+            // 
+            // SetSpeed
+            // 
+            this.SetSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetSpeed.Location = new System.Drawing.Point(275, 144);
+            this.SetSpeed.Name = "SetSpeed";
+            this.SetSpeed.Size = new System.Drawing.Size(271, 81);
+            this.SetSpeed.TabIndex = 23;
+            this.SetSpeed.Text = "/     SPEED";
+            this.SetSpeed.UseVisualStyleBackColor = true;
+            this.SetSpeed.Click += new System.EventHandler(this.SetSpeed_Click);
+            // 
             // Custom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
@@ -294,6 +344,8 @@
             this.BackgroundImage = global::oss_rythm.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1396, 690);
+            this.Controls.Add(this.SetSpeed);
+            this.Controls.Add(this.SetBlock);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.labelSelect);
@@ -344,5 +396,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Label RealBmp;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
+        private System.Windows.Forms.Button SetBlock;
+        private System.Windows.Forms.Button SetSpeed;
     }
 }

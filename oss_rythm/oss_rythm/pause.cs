@@ -15,17 +15,20 @@ namespace oss_rythm
     {
         public event EventHandler Changed;
         private WindowsMediaPlayer _media;
-        Form grandParent;
+        Custom custom;
+        Start start;
+        Login login;
         Form parent;
-        public pause(WindowsMediaPlayer media,Form parent, Form grandParent)
+        string username;
+        public pause(WindowsMediaPlayer media,Form parent,string username)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen; 
             this.FormBorderStyle = FormBorderStyle.None;
             _media = media;
             this.parent = parent;
-            this.grandParent = grandParent;
             volume.Value = _media.settings.volume;
+            this.username = username;
         }
 
         private void btnContinue_Click(object sender, EventArgs e)
@@ -39,7 +42,10 @@ namespace oss_rythm
         {
             parent.Close();
             this.Close();
-            grandParent.Visible = true;
+            login = new Login();
+            start = new Start(username,login);
+            custom = new Custom(username,start);
+            custom.Show();
         }
         private void Volume_Scroll(object sender, EventArgs e)
         {

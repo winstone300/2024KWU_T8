@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WMPLib;
@@ -14,7 +15,9 @@ namespace oss_rythm
         private WindowsMediaPlayer _media; // 음악 재생을 위한 미디어 플레이어
         int progressPercentage; // 진행률 퍼센티지
         int mode = 1; // 게임 모드 (0: Easy, 1: Normal, 2: Hard)
-        double bpm; // BPM 값
+        int click = 1;// 설정 모드 (1: 블락 , 2: speed)
+        double speed = 1.0; // 게임속도
+        double bpm = 0.0; // BPM 값
         Form1 form1; // Form1 객체
         private Form parent; // 부모 폼
         private Custom customForm; // Custom 폼 객체
@@ -140,7 +143,7 @@ namespace oss_rythm
             }
         }
 
-        // 음악 파일 목록 저장
+        // 음악 파일 목록 저장 => 수정해야 할 부분!!
         private void SaveMusicFiles()
         {
             string saveFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "musicFiles.txt");
@@ -153,7 +156,8 @@ namespace oss_rythm
             }
         }
 
-        // 음악 파일 목록 로드
+
+        // 음악 파일 목록 로드 06-17
         private void LoadMusicFiles()
         {
             string loadFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "musicFiles.txt");
@@ -165,13 +169,33 @@ namespace oss_rythm
                     while ((line = reader.ReadLine()) != null)
                     {
                         var parts = line.Split('|');
-                        if (parts.Length == 3)
+                        if (parts.Length >= 5)
+                        {
+                            string title = parts[0];
+                            string filePath = parts[1];
+                            double bpm = double.Parse(parts[2]);
+                            string totalScore = parts[3]; 
+                            string maxcombo = parts[4];
+                            musicFiles[title] = (filePath, bpm);
+
+                            var listViewItem = new ListViewItem(title); // 06-17
+                            listViewItem.SubItems.Add(bpm.ToString());
+                            listViewItem.SubItems.Add(totalScore);
+                            listViewItem.SubItems.Add(maxcombo);
+                            listView1.Items.Add(listViewItem);
+                        }
+                        else if (parts.Length == 3) // 기존 포맷을 위한 조건 추가
                         {
                             string title = parts[0];
                             string filePath = parts[1];
                             double bpm = double.Parse(parts[2]);
                             musicFiles[title] = (filePath, bpm);
-                            listView1.Items.Add(new ListViewItem(new[] { title, bpm.ToString() }));
+
+                            var listViewItem = new ListViewItem(title);
+                            listViewItem.SubItems.Add(bpm.ToString());
+                            listViewItem.SubItems.Add("0"); // 기본 점수
+                            listViewItem.SubItems.Add("0"); // 기본 콤보
+                            listView1.Items.Add(listViewItem);
                         }
                     }
                 }
@@ -247,9 +271,12 @@ namespace oss_rythm
                 MessageBox.Show("BPM 추출 중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (speed == 1.5) bpm = bpm * 1.5;
+            if (speed == 2.0) bpm = bpm * 2.0;
             form1 = new Form1(_media, this, bpm, mode, this,username);
             form1.Show();
             SaveListBoxItems();
+            _media.settings.rate = speed; //재생속도로 음악 재생
             _media.controls.play();
             this.Hide();
         }
@@ -300,16 +327,28 @@ namespace oss_rythm
             }
         }
 
-        // ListBox 항목 저장
+        // ListBox 항목 저장 ++ 06-17
         public void SaveListBoxItems()
         {
-            SaveMusicFiles();
+            string saveFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "musicFiles.txt");
+            using (StreamWriter writer = new StreamWriter(saveFilePath))
+            {
+                foreach (ListViewItem item in listView1.Items)
+                {
+                    string title = item.Text;
+                    string filePath = musicFiles.ContainsKey(title) ? musicFiles[title].FilePath : string.Empty;
+                    double bpm = musicFiles.ContainsKey(title) ? musicFiles[title].Bpm : 0.0;
+                    string totalScore = item.SubItems.Count > 2 ? item.SubItems[2].Text : "0";
+                    string maxcombo = item.SubItems.Count > 3 ? item.SubItems[3].Text : "0";
+                    writer.WriteLine($"{title}|{filePath}|{bpm}|{totalScore}|{maxcombo}");
+                }
+            }
         }
 
         // ListBox 항목 로드
         private void LoadListBoxItems()
         {
-            listView1.Items.Clear();
+            // listView1.Items.Clear();
             LoadMusicFiles();
         }
 
@@ -368,9 +407,8 @@ namespace oss_rythm
                 MessageBox.Show("난이도를 설정할 항목을 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-        // 게임 결과 업데이트 메서드 (점수와 콤보를 변경할 때)
-        public void UpdateListViewWithGameResults(int combo, double totalScore)
+        // 점수 업데이트 ++ 06-17
+        public void UpdateTotalScore(double totalScore)
         {
             if (listView1.SelectedItems.Count > 0)
             {
@@ -387,10 +425,17 @@ namespace oss_rythm
                     }
                     selectedItem.SubItems[2].Text = totalScore.ToString();
                 }
-
+            }
+        }
+        // 콤보 업데이트 ++ 06-17
+        public void UpdateCombo(int maxcombo)
+        {
+            if (listView1.SelectedItems.Count > 0)
+            {
+                ListViewItem selectedItem = listView1.SelectedItems[0];
                 if (selectedItem.SubItems.Count > 3)
                 {
-                    selectedItem.SubItems[3].Text = combo.ToString();
+                    selectedItem.SubItems[3].Text = maxcombo.ToString();
                 }
                 else
                 {
@@ -398,12 +443,8 @@ namespace oss_rythm
                     {
                         selectedItem.SubItems.Add("");
                     }
-                    selectedItem.SubItems[3].Text = combo.ToString();
+                    selectedItem.SubItems[3].Text = maxcombo.ToString();
                 }
-            }
-            else
-            {
-                MessageBox.Show("Please select an item to update.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -422,22 +463,62 @@ namespace oss_rythm
         // Easy 버튼 클릭 이벤트 핸들러
         private void btnEasy_Click(object sender, EventArgs e)
         {
-            mode = 0;
-            UpdateDifficulty("Easy");
+            if(click == 1)  // 블락 조절
+            {
+                mode = 0;
+                UpdateDifficulty("Easy");
+            }   
+            else        // 속도조절
+            {
+                speed = 1.0;
+                if (bpm != 0.0) RealBmp.Text = bpm.ToString();
+            }
         }
 
         // Normal 버튼 클릭 이벤트 핸들러
         private void btnNormal_Click(object sender, EventArgs e)
         {
-            mode = 1;
-            UpdateDifficulty("Normal");
+            if (click == 1)
+            {
+                mode = 1;
+                UpdateDifficulty("Normal");
+            }
+            else
+            {
+                speed = 1.5;
+                if (bpm != 0.0) RealBmp.Text = (bpm * 1.5).ToString();
+            }
         }
 
         // Hard 버튼 클릭 이벤트 핸들러
         private void btnHard_Click(object sender, EventArgs e)
         {
-            mode = 2;
-            UpdateDifficulty("Hard");
+            if (click == 1)
+            {
+                mode = 2;
+                UpdateDifficulty("Hard");
+            }
+            else
+            {
+                speed = 2.0;
+                if (bpm != 0.0) RealBmp.Text = (bpm * 2.0).ToString();
+            }
+        }
+
+        private void SetBlock_Click(object sender, EventArgs e)
+        {
+            click = 1;
+            btnEasy.Text = "EASY";
+            btnNormal.Text = "NORMAL";
+            btnHard.Text = "HARD";
+        }
+
+        private void SetSpeed_Click(object sender, EventArgs e)
+        {
+            click = 2;
+            btnEasy.Text = "X 1.0";
+            btnNormal.Text = "X 1.5";
+            btnHard.Text = "X 2.0";
         }
     }
 }
