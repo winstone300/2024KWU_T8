@@ -67,6 +67,7 @@ namespace oss_rythm
         private string username; // 사용자 이름
         string filePath;
         string title;
+        string musicfilePath;
 
         // Custom 생성자
         public Custom(string username, Form parent)
@@ -155,7 +156,8 @@ namespace oss_rythm
                 string pattern = @"^(.+)\.[^.]+$";
                 string RefileName = Regex.Replace(fileName, pattern, "$1");
                 lblTitleInfo.Text = RefileName;
-                title = RefileName; 
+                title = RefileName;
+                musicfilePath = ofd.FileName;
 
                 /*
                 if (!musicFiles.ContainsKey(RefileName))
@@ -180,6 +182,19 @@ namespace oss_rythm
                 lblScoreInfo.Text = selectedItem.SubItems.Count > 2 && !string.IsNullOrEmpty(selectedItem.SubItems[2].Text) ? selectedItem.SubItems[2].Text : "0";
                 lblBpmInfo.Text = selectedItem.SubItems.Count > 1 && !string.IsNullOrEmpty(selectedItem.SubItems[1].Text) ? selectedItem.SubItems[1].Text : "N/A";
                 string titleOnly = selectedItem.Text.Split(new string[] { " (BPM: " }, StringSplitOptions.None)[0];
+                title = lblTitleInfo.Text;
+                DataRow[] foundRows = song.Tables["Song"].Select($"title = '{lblTitleInfo.Text}'");
+                bpm = (double)foundRows[0]["bpm"];
+
+                if (_media == null)
+                {
+                    _media = new WindowsMediaPlayer();
+                }
+
+                _media.URL = (string)foundRows[0]["path"];
+                _media.controls.stop();
+                BpmLoding.Text = "BPM 추출 완료";
+                /*
                 if (musicFiles.ContainsKey(titleOnly))
                 {
                     string filePath = musicFiles[titleOnly].FilePath;
@@ -216,6 +231,7 @@ namespace oss_rythm
                         }
                     }
                 }
+                */
             }
             else
             {
@@ -313,20 +329,17 @@ namespace oss_rythm
                     // 특정 이름을 가진 사람들을 검색합니다.
                     DataRow[] foundRows = song.Tables["Song"].Select($"title = '{title}'");
 
-                    // 
+                    // 없는 경우
                     if (foundRows.Length == 0)
                     {
                         //data set 추가
                         song.Tables["Song"].Rows.Add(new object[] {
-                      username, title,bpm,0,ofd.FileName
+                      username, title,bpm,0,musicfilePath
                  });
                         song.WriteXml(filePath);
                     }
-                    else
-                    {
-                        foundRows[0]["bpm"] = bpm;
-                        song.WriteXml(filePath);
-                    }
+                    listView1.Items.Clear();  // 기존 항목 초기화
+                    getInfo(username);
                     return;
                 }
             }

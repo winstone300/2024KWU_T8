@@ -68,10 +68,13 @@ namespace oss_rythm
 
             if (foundRows.Length > 0)
             {
-                // 행이 존재하면 업데이트
-                foundRows[0]["bpm"] = bpm;
-                foundRows[0]["score"] = score;
-                song.WriteXml(filePath);
+                // 행이 존재하면 기존점수와 비교후 업데이트
+                int originScore = (int)foundRows[0]["score"];
+                if (originScore < score)
+                {
+                    foundRows[0]["score"] = score;
+                    song.WriteXml(filePath);
+                }
             }
             else
             {
