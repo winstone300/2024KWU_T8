@@ -171,5 +171,11 @@
   <ItemGroup>
     <None Include="Resources\ScoreBoardBack.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\배경9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\backgroundMusic.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,9 +7,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media; // System.Media 네임스페이스 추가
+using System.Reflection; // 리소스를 가져오기 위한 네임스페이스 추가
 
 namespace oss_rythm
 {
@@ -22,11 +25,27 @@ namespace oss_rythm
         private bool isPasswordPlaceholder = true; // 비밀번호 필드가 placeholder 상태인지 확인
         private Timer statusClearTimer;
         private bool isRegisterFormOpen = false;  // Register 폼이 열려 있는지 확인하는 플래그
+        private List<System.Windows.Forms.Button> btnList; // 버튼 리스트
+        private SoundPlayer soundPlayer; // SoundPlayer 인스턴스 추가
 
         public Login()
         {
             InitializeComponent();
             InitializeLoignComponents();
+            this.txtPassword.AutoSize = false;
+            this.txtUsername.AutoSize = false;
+            lblSignIn.Parent = pictureBox1;
+            lblSignIn.BackColor = Color.Transparent;
+            lblStatus.Font = new Font("Open Sans", 10, FontStyle.Bold);
+            lblStatus.ForeColor = Color.Red;
+
+            // 리소스에서 SoundPlayer 초기화
+            Stream soundStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("oss_rythm.Resources.backgroundMusic.wav");
+            if (soundStream != null)
+            {
+                soundPlayer = new SoundPlayer(soundStream);
+                soundPlayer.PlayLooping(); // 배경음악 반복 재생
+            }
         }
 
         // 로그인 폼 초기화하는 메서드
@@ -106,8 +125,7 @@ namespace oss_rythm
 
         // 로그인 버튼 클릭 시
         private void btnLogin_Click(object sender, EventArgs e)
-        {
-
+        { 
             string username = txtUsername.Text;
             string password = txtPassword.Text;
             if (string.IsNullOrEmpty(username))
@@ -141,26 +159,28 @@ namespace oss_rythm
 
                 if (response == "Login Success")
                 {
-                    Start startForm = new Start(username,this);
+                    // 음악 종료
+                    soundPlayer.Stop();
+                    Start startForm = new Start(username, this);
                     startForm.Show();
                     this.Hide();
                 }
 
                 else
                 {
-                    lblStatus.Location = new Point(235, 160);
+                    lblStatus.Location = new Point(145, 180);
                     lblStatus.Text = "해당하는 ID가 없습니다. 다시 입력해주세요.";
                 }
             }
             catch (SocketException ex)
             {
-                lblStatus.Location = new Point(280, 160);
+                lblStatus.Location = new Point(180, 180);
                 lblStatus.Text = "서버에 연결할 수 없습니다.";
             }
 
             catch (Exception ex)
             {
-                lblStatus.Location = new Point(100, 240);
+                lblStatus.Location = new Point(10, 180);
                 lblStatus.Text = $"Exception: {ex.Message}";
             }
 
@@ -228,6 +248,13 @@ namespace oss_rythm
         private void RegisterForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             isRegisterFormOpen = false;  // Register 폼이 닫히면 플래그를 false로 설정
+        }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            lblSignIn.BackColor = Color.Transparent;
+
+            lblStatus.BackColor = Color.Transparent;
         }
     }
 }
