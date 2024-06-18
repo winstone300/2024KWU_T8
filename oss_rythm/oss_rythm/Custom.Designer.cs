@@ -80,7 +80,7 @@
             // 
             this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.btnPlay.Location = new System.Drawing.Point(689, 385);
-            this.btnPlay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnPlay.Margin = new System.Windows.Forms.Padding(2);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(225, 45);
             this.btnPlay.TabIndex = 4;
@@ -92,7 +92,7 @@
             // 
             this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.btnBack.Location = new System.Drawing.Point(28, 25);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnBack.Margin = new System.Windows.Forms.Padding(2);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(74, 29);
             this.btnBack.TabIndex = 5;
@@ -112,9 +112,9 @@
             this.groupBox1.Controls.Add(this.labelTitle);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
             this.groupBox1.Location = new System.Drawing.Point(28, 265);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(604, 165);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
@@ -212,7 +212,7 @@
             // 
             this.btnHard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.btnHard.Location = new System.Drawing.Point(442, 174);
-            this.btnHard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnHard.Margin = new System.Windows.Forms.Padding(2);
             this.btnHard.Name = "btnHard";
             this.btnHard.Size = new System.Drawing.Size(190, 54);
             this.btnHard.TabIndex = 11;
@@ -224,7 +224,7 @@
             // 
             this.btnNormal.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
             this.btnNormal.Location = new System.Drawing.Point(242, 174);
-            this.btnNormal.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnNormal.Margin = new System.Windows.Forms.Padding(2);
             this.btnNormal.Name = "btnNormal";
             this.btnNormal.Size = new System.Drawing.Size(190, 54);
             this.btnNormal.TabIndex = 10;
@@ -236,7 +236,7 @@
             // 
             this.btnEasy.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEasy.Location = new System.Drawing.Point(29, 174);
-            this.btnEasy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnEasy.Margin = new System.Windows.Forms.Padding(2);
             this.btnEasy.Name = "btnEasy";
             this.btnEasy.Size = new System.Drawing.Size(190, 54);
             this.btnEasy.TabIndex = 9;
@@ -258,7 +258,7 @@
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(679, 297);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(250, 35);
             this.progressBar1.TabIndex = 13;
@@ -288,7 +288,7 @@
             // btnDelete
             // 
             this.btnDelete.Location = new System.Drawing.Point(840, 31);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(89, 23);
             this.btnDelete.TabIndex = 17;
@@ -306,7 +306,7 @@
             this.columnHeader5});
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(679, 82);
-            this.listView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(251, 219);
             this.listView1.TabIndex = 18;
@@ -337,7 +337,7 @@
             // 
             this.SetBlock.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetBlock.Location = new System.Drawing.Point(29, 96);
-            this.SetBlock.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SetBlock.Margin = new System.Windows.Forms.Padding(2);
             this.SetBlock.Name = "SetBlock";
             this.SetBlock.Size = new System.Drawing.Size(190, 54);
             this.SetBlock.TabIndex = 22;
@@ -349,7 +349,7 @@
             // 
             this.SetSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetSpeed.Location = new System.Drawing.Point(192, 96);
-            this.SetSpeed.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.SetSpeed.Margin = new System.Windows.Forms.Padding(2);
             this.SetSpeed.Name = "SetSpeed";
             this.SetSpeed.Size = new System.Drawing.Size(190, 54);
             this.SetSpeed.TabIndex = 23;
@@ -379,7 +379,7 @@
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.btnLoad);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Custom";
             this.Text = "Custom";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Custom_FormClosed);

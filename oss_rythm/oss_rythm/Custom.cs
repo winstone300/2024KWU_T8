@@ -31,7 +31,7 @@ namespace oss_rythm
 
                 // 'name' 열 추가
                 DataColumn nameColumn = songTable.Columns.Add("name", typeof(string));
-                nameColumn.AllowDBNull = false; // 기본 키는 null일 수 없습니다.
+                nameColumn.AllowDBNull = false; 
 
                 // 'title' 열 추가
                 songTable.Columns.Add("title", typeof(string));
@@ -45,6 +45,8 @@ namespace oss_rythm
                 // 'path' 열 추가
                 songTable.Columns.Add("path", typeof(string));
 
+                // 'rank' 열 추가
+                songTable.Columns.Add("rank", typeof(int));
 
                 // 테이블을 데이터셋에 추가
                 this.Tables.Add(songTable);
@@ -125,6 +127,7 @@ namespace oss_rythm
                     var listViewItem = new ListViewItem(title); // 06-17
                     listViewItem.SubItems.Add(bpm.ToString());
                     listViewItem.SubItems.Add(score.ToString());
+                    if (foundRow["rank"] != null) listViewItem.SubItems.Add(foundRow["rank"].ToString());
                     listView1.Items.Add(listViewItem);
                 }
             }
@@ -640,5 +643,6 @@ namespace oss_rythm
             //종료시 dataset 업데이트
             song.WriteXml(filePath);
         }
+
     }
 }
