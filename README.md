@@ -65,8 +65,9 @@ oss_rythm Project는 C&#35; Windows Forms를 이용하여 제작한 리듬게임
 
 * Q) 글꼴을 설치하도록 권장하는 이유가 무엇인가요?
   
-  A) OS에서 제공하는 기본 글꼴에서 벗어난 Font가 존재하므로 가급적 해당 특수 글꼴을 미리 설치하는 것이 충돌 방지에 좋습니다.
+  A) OS에서 제공하는 기본 글꼴에서 벗어난 Font가 존재하므로 가급적 해당 특수 글꼴을 미리 설치해야 충돌을 방지할 수 있습니다.
 
+<br>
 
 ## 제작 팀원
 
@@ -81,7 +82,7 @@ oss_rythm Project는 C&#35; Windows Forms를 이용하여 제작한 리듬게임
 <br>
 
 
-## 변경 로그
+## 사용한 소프트웨어
 
-* 
+* Microsoft Visual Studio 2022 - Windows Forms 앱 (.NET Framework)
 
