@@ -329,8 +329,8 @@ namespace oss_rythm
                     bpm = double.Parse(element.InnerText.Trim());
                     lblBpmInfo.Text = element.InnerText.Trim();
                     UpdateListBoxWithBpm(lblTitleInfo.Text, bpm);
-                    // 특정 이름을 가진 사람들을 검색합니다.
-                    DataRow[] foundRows = song.Tables["Song"].Select($"title = '{title}'");
+                    // 특정 이름을 가진 사람들을 검색.
+                    DataRow[] foundRows = song.Tables["Song"].Select($"title = '{title}' AND name = '{username}'");
 
                     // 없는 경우
                     if (foundRows.Length == 0)
@@ -482,12 +482,13 @@ namespace oss_rythm
                 ListViewItem selectedItem = listView1.SelectedItems[0];
                 string selectedTitle = selectedItem.Text;
                 listView1.Items.Remove(selectedItem);
-
+                /*
                 if (musicFiles.ContainsKey(selectedTitle))
                 {
                     musicFiles.Remove(selectedTitle);
                 }
-
+                */
+                DeleteSong(username, selectedTitle);
                 SaveListBoxItems();
 
                 lblTitleInfo.Text = " ";
@@ -498,6 +499,21 @@ namespace oss_rythm
             {
                 MessageBox.Show("삭제할 항목을 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        //dataset row삭제
+        public void DeleteSong(string username, string title)
+        {
+            DataTable songTable = song.Tables["Song"];
+            DataRow[] foundRows = songTable.Select($"title = '{title}' AND name = '{username}'");
+
+            foreach (DataRow row in foundRows)
+            {
+                row.Delete();
+            }
+
+            song.AcceptChanges();
+            song.WriteXml(filePath);
         }
 
         // 난이도 업데이트
