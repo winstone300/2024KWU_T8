@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(pause));
             this.label1 = new System.Windows.Forms.Label();
             this.btnContinue = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
@@ -38,19 +39,24 @@
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("돋움", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label1.Location = new System.Drawing.Point(244, 35);
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label1.Location = new System.Drawing.Point(350, 51);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 27);
+            this.label1.Size = new System.Drawing.Size(158, 41);
             this.label1.TabIndex = 0;
             this.label1.Text = "PAUSE";
             // 
             // btnContinue
             // 
-            this.btnContinue.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btnContinue.Location = new System.Drawing.Point(234, 93);
+            this.btnContinue.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnContinue.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnContinue.Location = new System.Drawing.Point(334, 140);
+            this.btnContinue.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnContinue.Name = "btnContinue";
-            this.btnContinue.Size = new System.Drawing.Size(127, 31);
+            this.btnContinue.Size = new System.Drawing.Size(181, 46);
             this.btnContinue.TabIndex = 1;
             this.btnContinue.Text = "continue";
             this.btnContinue.UseVisualStyleBackColor = true;
@@ -58,10 +64,12 @@
             // 
             // btnExit
             // 
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.btnExit.Location = new System.Drawing.Point(249, 151);
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.btnExit.Location = new System.Drawing.Point(356, 226);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(92, 31);
+            this.btnExit.Size = new System.Drawing.Size(131, 46);
             this.btnExit.TabIndex = 2;
             this.btnExit.Text = "exit";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -69,23 +77,27 @@
             // 
             // volume
             // 
-            this.volume.Location = new System.Drawing.Point(200, 206);
+            this.volume.BackColor = System.Drawing.Color.MidnightBlue;
+            this.volume.Location = new System.Drawing.Point(286, 309);
+            this.volume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.volume.Maximum = 100;
             this.volume.Name = "volume";
-            this.volume.Size = new System.Drawing.Size(204, 45);
+            this.volume.Size = new System.Drawing.Size(291, 69);
             this.volume.TabIndex = 3;
             this.volume.Value = 50;
             this.volume.Scroll += new System.EventHandler(this.Volume_Scroll);
             // 
             // pause
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(638, 291);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(911, 436);
             this.Controls.Add(this.volume);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnContinue);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "pause";
             this.Text = "pause";
             this.TopMost = true;
