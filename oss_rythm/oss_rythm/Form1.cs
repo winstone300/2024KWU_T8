@@ -13,6 +13,8 @@ using WMPLib;
 
 namespace oss_rythm
 {
+
+
     public partial class Form1 : Form
     {
         private pause pauseForm;
@@ -70,6 +72,17 @@ namespace oss_rythm
             this.customForm = customForm; // +++
             this.username = username;
             this.title = title;
+
+            label1.Parent = pictureBox1;
+            label1.BackColor = Color.Transparent;
+
+            label2.Parent = pictureBox1;
+            label2.BackColor = Color.Transparent;
+            label3.Parent = pictureBox1;
+            label3.BackColor = Color.Transparent;
+            label4.Parent = pictureBox1;
+            label4.BackColor = Color.Transparent;
+
             // Initialize skipNext dictionary for each bar
             skipNext[bar1] = 0;
             skipNext[bar2] = 0;
@@ -125,6 +138,11 @@ namespace oss_rythm
             // Initialize labels (폼 디자이너에서 이미 추가된 레이블 사용)
             UpdateScore();
             label2.Text = "";
+            label4.Text = "MaxCombo:0";
+
+
+
+            label3.Text = "0";
         }
 
 
@@ -210,7 +228,10 @@ namespace oss_rythm
                     }
 
                     // 콤보와 점수를 업데이트합니다.
-                    label1.Text = "Combo: " + combo + "\nMax Combo: " + maxcombo;
+                    // Label을 맨 앞에 보이게 설정
+                    // label3.BringToFront();
+                    label3.Text = "" + combo;
+                    label4.Text = "MaxCombo:" + maxcombo;
                     UpdateScore();
                     notes.Remove(note);
                     note.Dispose();
@@ -218,6 +239,7 @@ namespace oss_rythm
                     // 해당 노트에 대한 판정이 끝났으므로 키 상태 초기화
                     keyHoldStatus[bar] = new Tuple<long, long>(0, 0);
                 }
+
 
                 // 노트의 하단이 패널의 하단을 지난 경우
                 else if (note.Bottom > note.Parent.Height)
@@ -446,7 +468,7 @@ namespace oss_rythm
 
         private void UpdateLabels()
         {
-            
+
             if (customForm != null && !customForm.IsDisposed)
             {
                 customForm.UpdateTotalScore(totalScore);
@@ -627,6 +649,7 @@ namespace oss_rythm
         {
             // 아무 것도 하지 않음
         }
+
 
     }
 }
