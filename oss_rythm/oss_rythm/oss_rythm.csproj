@@ -168,5 +168,8 @@
   <ItemGroup>
     <None Include="Resources\backGround_form1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ScoreBoardBack.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

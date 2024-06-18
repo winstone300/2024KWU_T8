@@ -46,6 +46,42 @@ namespace oss_rythm
             DataTable songTable = song.Tables["Song"];
             DataRow[] foundRows = songTable.Select($"title = '{title}' AND name = '{username}'");
             this.rank = (int)foundRows[0]["rank"];
+            label1.BackColor = Color.Transparent;
+            label2.BackColor = Color.Transparent;
+            label3.BackColor = Color.Transparent;
+            label4.BackColor = Color.Transparent;
+            lblScore.BackColor = Color.Transparent;
+            lblCombo.BackColor = Color.Transparent;
+            lblRank.BackColor = Color.Transparent;
+            if (score > 90)
+            {
+                label4.Text = "S";
+                label4.ForeColor = Color.Gold;
+            }
+            else if (score > 80)
+            {
+                label4.Text = "A";
+            }
+            else if (score > 70)
+            {
+                label4.Text = "B";
+                label4.ForeColor = Color.RoyalBlue;
+            }
+            else if (score > 60)
+            {
+                label4.Text = "C";
+                label4.ForeColor = Color.Green;
+            }
+            else if (score > 55)
+            {
+                label4.Text = "D";
+                label4.ForeColor = Color.Red;
+            }
+            else
+            {
+                label4.Text = "F";
+                label4.ForeColor = Color.Red;
+            }
         }
 
         //dataset불러오기
