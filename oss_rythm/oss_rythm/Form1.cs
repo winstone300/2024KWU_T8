@@ -21,10 +21,12 @@ namespace oss_rythm
         private Custom customForm;
         private Timer gameTimer = new Timer();
         private List<Panel> notes = new List<Panel>();
-        private Dictionary<Panel, bool> keyHoldStatus = new Dictionary<Panel, bool>();
+        private Dictionary<Panel, Tuple<long, long>> keyHoldStatus = new Dictionary<Panel, Tuple<long, long>>(); // 키가 눌린 시점과 떼어진 시점을 저장하는 Dictionary
         private Dictionary<Panel, bool> hitStatus = new Dictionary<Panel, bool>();
+        private Dictionary<Panel, long> curTimenote = new Dictionary<Panel, long>();
         private ScoreBoard ScoreBoard;
         private string username;
+        private long pauseTime;
 
         private int combo = 0;
         public int maxcombo = 0;
@@ -32,9 +34,13 @@ namespace oss_rythm
         private int perfectCount = 0;
         private int goodCount = 0;
         private int badCount = 0;
+        private int missCount = 0;
+        private int totalBlocks = 0;
+
         private double bpm;
         private double targetTime;
         private int countTarget = 1;
+
         private long startTime;
         public double totalScore = 0.0; //총 점수 변수 추가
         private bool press1 = true;
@@ -43,12 +49,13 @@ namespace oss_rythm
         private bool press4 = true;
         string title;
 
+
         private Random random = new Random();
         private Dictionary<Panel, int> skipNext = new Dictionary<Panel, int>();
         // 효과음 재생을 위한 WindowsMediaPlayer
         private WindowsMediaPlayer effectSound;
 
-        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm,string username,string title) // 변수 검토 예정
+        public Form1(WindowsMediaPlayer media, Form parent, double bpm, int mode, Custom customForm, string username, string title) // 변수 검토 예정
         {
             this.bpm = bpm;  // 추출한 bpm값 설정
             InitializeComponent();
@@ -69,11 +76,15 @@ namespace oss_rythm
             skipNext[bar3] = 0;
             skipNext[bar4] = 0;
 
+            curTimenote[bar1] = 0;
+            curTimenote[bar2] = 0;
+            curTimenote[bar3] = 0;
+            curTimenote[bar4] = 0;
             // Initialize key hold status and hit status
-            keyHoldStatus[bar1] = false;
-            keyHoldStatus[bar2] = false;
-            keyHoldStatus[bar3] = false;
-            keyHoldStatus[bar4] = false;
+            keyHoldStatus[bar1] = new Tuple<long, long>(0, 0);
+            keyHoldStatus[bar2] = new Tuple<long, long>(0, 0);
+            keyHoldStatus[bar3] = new Tuple<long, long>(0, 0);
+            keyHoldStatus[bar4] = new Tuple<long, long>(0, 0);
 
             hitStatus[bar1] = false;
             hitStatus[bar2] = false;
@@ -112,85 +123,171 @@ namespace oss_rythm
             btnR.MouseUp += Btn_MouseUp;
 
             // Initialize labels (폼 디자이너에서 이미 추가된 레이블 사용)
-            label1.Text = "Combo: 0\nScore: 0.0\nMax Combo: 0";
+            UpdateScore();
             label2.Text = "";
         }
 
-        // 게임 타이머 틱 이벤트 핸들러
+
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime; // 현재 시간을 밀리초 단위로 계산
-            double getTime = curTime / (targetTime * countTarget); // 목표 시간 대비 현재 시간의 비율 계산
 
+            // 현재 시간(밀리초 단위)을 계산 -> 시작 시간(startTime)에서 현재 시간을 뺀 값을 밀리초 단위로 계산
+            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
+
+            // 목표 시간 대비 현재 시간의 비율을 계산
+            double getTime = curTime / (targetTime * countTarget);
+
+            long curTime2 = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 현재 시간을 밀리초 단위로 계산(블록과 비교를 위해)
+            // 목표 시간에 도달했는지 확인하고 노트를 생성(bpm 단위로 생성)
             if ((int)getTime == 1)
             {
                 CreateNotes(); // 노트 생성
-                countTarget++;
+                countTarget++; //// 목표 시간을 증가
             }
-
-            // 노트 이동 로직
+            // 모든 노트를 순회하며 위치를 업데이트하고 판정을 수행
             foreach (Panel note in notes.ToList())
             {
                 note.Top += 5; // 노트의 위치를 아래로 이동
-                if (note.Parent == null) continue;
-                if (note.Top > note.Parent.Height)
-                {
-                    if (note.Height > 0)
-                    {
-                        // 패널 끝에 도달한 긴 블록이 서서히 사라지도록
-                        note.Height -= 5;
-                    }
-                    else
-                    {
-                        // 긴 블록이 사라지면서 점수 판정
-                        Panel bar = note.Parent as Panel;
-                        if (keyHoldStatus[bar])
-                        {
-                            double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
-                            double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
+                Panel bar = note.Parent as Panel; // 노트의 부모 패널을 가져오기
 
-                            if (difference < 100)
-                            {
-                                perfectCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 1.0;
-                                label2.Text = "Perfect!"; // Perfect 판정
-                                label2.ForeColor = Color.Green;
-                            }
-                            else if (difference < 200)
-                            {
-                                goodCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 0.5;
-                                label2.Text = "Good!"; // Good 판정
-                                label2.ForeColor = Color.Blue;
-                            }
-                            else
-                            {
-                                badCount++;
-                                combo = 0;
-                                label2.Text = "Bad!"; // Bad 판정
-                                label2.ForeColor = Color.Red;
-                            }
+                if (note.Parent == null) continue; //// 노트가 부모 패널을 가지고 있지 않다면 건너뜀
+
+
+
+                // 노트의 상단이 패널의 하단을 지났고 키가 그 전에 눌러진 경우
+                else if (note.Top > note.Parent.Height)
+                {
+
+                    long notePassTopTime = curTime; // 노트의 상단이 패널의 하단을 지난 시점
+                    long keyDownTime = keyHoldStatus[bar].Item1; // 키가 눌린 시점
+                    long keyUpTime = keyHoldStatus[bar].Item2; // 키가 떼어진 시점(0이면 키가 아직 안떼어진 것)
+
+                    // 노트가 패널에 전부 지나가기 전에 키를 누른 경우
+                    if (keyDownTime > 0)
+                    {
+                        double difference = Math.Abs(curTimenote[bar] - keyDownTime);
+
+                        if (difference < 200)
+                        {
+                            perfectCount++;
+                            combo++;
+                            if (combo > maxcombo) maxcombo = combo;
+
+                            label2.Text = "Perfect!";
+                            label2.ForeColor = Color.Green;
+                        }
+                        else if (difference < 300)
+                        {
+                            goodCount++;
+                            combo++;
+                            if (combo > maxcombo) maxcombo = combo;
+
+                            label2.Text = "Good!";
+                            label2.ForeColor = Color.Blue;
+                        }
+                        else if (difference < 400)
+                        {
+                            badCount++;
+                            combo++;
+
+                            label2.Text = "Bad!";
+                            label2.ForeColor = Color.Purple;
                         }
                         else
                         {
                             badCount++;
                             combo = 0;
-                            label2.Text = "Miss!"; // Miss 판정
+                            label2.Text = "Miss!";
                             label2.ForeColor = Color.Red;
                         }
-                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
-
-                        notes.Remove(note); // 리스트에서 노트 제거
-                        note.Dispose(); // 노트 자원 해제
                     }
+                    else
+                    {
+                        missCount++;
+                        combo = 0;
+                        label2.Text = "Miss!";
+                        label2.ForeColor = Color.Red;
+                    }
+
+                    // 콤보와 점수를 업데이트합니다.
+                    label1.Text = "Combo: " + combo + "\nMax Combo: " + maxcombo;
+                    UpdateScore();
+                    notes.Remove(note);
+                    note.Dispose();
+                    curTimenote[bar] = 0;
+                    // 해당 노트에 대한 판정이 끝났으므로 키 상태 초기화
+                    keyHoldStatus[bar] = new Tuple<long, long>(0, 0);
                 }
+
+                // 노트의 하단이 패널의 하단을 지난 경우
+                else if (note.Bottom > note.Parent.Height)
+                {
+                    curTimenote[bar] = curTime2; // 노트의 하단이 패널의 하단을 지난 시점
+                }
+
+
             }
         }
+        private void UpdateScore()
+        {
+            totalBlocks = perfectCount + goodCount + badCount + missCount;
 
+            double perfectScore = perfectCount * 100.0 / totalBlocks;
+            double goodScore = goodCount * 90.0 / totalBlocks;
+            double badScore = badCount * 80.0 / totalBlocks;
+            double missScore = missCount * 0.0 / totalBlocks;
+
+            totalScore = perfectScore + goodScore + badScore + missScore;
+            // totalScore를 소수점 둘째 자리까지 반올림하여 출력
+            totalScore = Math.Round(totalScore, 2);
+            if (totalBlocks == 0)
+            {
+                totalScore = 0;
+            }
+            // 소수점 둘째 자리까지 출력하도록 포맷팅
+            //string formattedScore = totalScore.ToString("F2");
+            label1.Text = $"Perfect: {perfectCount}\nGood: {goodCount}\nBad: {badCount}\nMiss: {missCount}\nScore: {totalScore}%\n";
+        }
+        private void HandleKeyPress(Keys key, bool isPressed, long curTime)
+        {
+            if (key == Keys.Q)
+                btnQ.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.W)
+                btnW.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.E)
+                btnE.BackColor = isPressed ? Color.Green : Color.White;
+            if (key == Keys.R)
+                btnR.BackColor = isPressed ? Color.Green : Color.White;
+
+            Panel targetBar = null;
+
+            switch (key)
+            {
+                case Keys.Q:
+                    targetBar = bar1;
+                    break;
+                case Keys.W:
+                    targetBar = bar2;
+                    break;
+                case Keys.E:
+                    targetBar = bar3;
+                    break;
+                case Keys.R:
+                    targetBar = bar4;
+                    break;
+                default:
+                    return;
+            }
+
+            if (isPressed)
+            {
+                keyHoldStatus[targetBar] = new Tuple<long, long>(curTime, keyHoldStatus[targetBar].Item2); // 키가 눌린 시점 기록
+            }
+            else
+            {
+                keyHoldStatus[targetBar] = new Tuple<long, long>(keyHoldStatus[targetBar].Item1, curTime); // 키가 떼어진 시점 기록
+            }
+        }
         // 각 bar에 노트를 생성하는 메서드
         private void CreateNotes()
         {
@@ -204,9 +301,9 @@ namespace oss_rythm
         private void CreateNoteInBar(Panel bar, int blockHeight, int blockType)
         {
 
-            
-              // 블록의 길이에 따른 색상 설정
-              Color blockColor;
+
+            // 블록의 길이에 따른 색상 설정
+            Color blockColor;
             switch (blockHeight)
             {
                 case 20:
@@ -316,6 +413,8 @@ namespace oss_rythm
             gameTimer.Stop(); // 게임 타이머 중지
             _media.controls.pause(); // 음악 일시정지
 
+            pauseTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 일시정지 시점 기록
+
             pauseForm = new pause(_media, this, username);
             pauseForm.TopLevel = true;
             pauseForm.Changed += PauseForm_Changed;
@@ -329,6 +428,8 @@ namespace oss_rythm
 
         private void PauseForm_Changed(object sender, EventArgs e)
         {
+            long resumeTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 재개 시점 기록
+            startTime += (resumeTime - pauseTime); // 일시정지된 시간만큼 startTime 조정
             _media.controls.play(); // 음악 재생
             gameTimer.Start(); // 게임 타이머 시작
 
@@ -345,7 +446,7 @@ namespace oss_rythm
 
         private void UpdateLabels()
         {
-            label1.Text = $"Combo: {combo}\nScore: {totalScore}\nMax Combo: {maxcombo}";
+            
             if (customForm != null && !customForm.IsDisposed)
             {
                 customForm.UpdateTotalScore(totalScore);
@@ -362,7 +463,7 @@ namespace oss_rythm
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            HandleKeyPress(e.KeyCode, true);
+
             effectSound.settings.volume = 50;
 
             //그라데이션 효과 추가
@@ -398,7 +499,8 @@ namespace oss_rythm
                     press4 = false;
                 }
             }
-
+            long curTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 현재 시간을 밀리초 단위로 계산
+            HandleKeyPress(e.KeyCode, true, curTime);
         }
         private void PlayKeyPressSound()
         {
@@ -411,7 +513,7 @@ namespace oss_rythm
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            HandleKeyPress(e.KeyCode, false);
+
             effectSound.settings.volume = 0;
 
             //그라데이션 효과 제거
@@ -435,6 +537,8 @@ namespace oss_rythm
                 RemoveGradientEffect(bar4);
                 press4 = true;
             }
+            long curTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 현재 시간을 밀리초 단위로 계산
+            HandleKeyPress(e.KeyCode, false, curTime);
         }
 
         //효과 추가 및 제거 코드
@@ -479,8 +583,8 @@ namespace oss_rythm
             else if (btn == btnW) key = Keys.W;
             else if (btn == btnE) key = Keys.E;
             else if (btn == btnR) key = Keys.R;
-
-            HandleKeyPress(key, true);
+            long curTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 현재 시간을 밀리초 단위로 계산
+            HandleKeyPress(key, true, curTime);
         }
 
         private void Btn_MouseUp(object sender, MouseEventArgs e)
@@ -493,161 +597,10 @@ namespace oss_rythm
             else if (btn == btnW) key = Keys.W;
             else if (btn == btnE) key = Keys.E;
             else if (btn == btnR) key = Keys.R;
-
-            HandleKeyPress(key, false);
+            long curTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; // 현재 시간을 밀리초 단위로 계산
+            HandleKeyPress(key, false, curTime);
         }
-        // 키 입력 처리 메서드
-        private void HandleKeyPress(Keys key, bool isPressed)
-        {
-            // 키 누름/해제 시 버튼 색상 변경
-            if (key == Keys.Q)
-                btnQ.BackColor = isPressed ? Color.Green : Color.White;
-            if (key == Keys.W)
-                btnW.BackColor = isPressed ? Color.Green : Color.White;
-            if (key == Keys.E)
-                btnE.BackColor = isPressed ? Color.Green : Color.White;
-            if (key == Keys.R)
-                btnR.BackColor = isPressed ? Color.Green : Color.White;
 
-            long curTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime; // 현재 시간을 밀리초 단위로 계산
-            Panel targetBar = null;
-            int blockType = 0;
-
-            // 키에 해당하는 타겟 바 설정
-            switch (key)
-            {
-                case Keys.Q:
-                    targetBar = bar1;
-                    break;
-                case Keys.W:
-                    targetBar = bar2;
-                    break;
-                case Keys.E:
-                    targetBar = bar3;
-                    break;
-                case Keys.R:
-                    targetBar = bar4;
-                    break;
-                default:
-                    return;
-            }
-
-            keyHoldStatus[targetBar] = isPressed; // 키 상태 업데이트
-
-            if (isPressed)
-            {
-                foreach (Panel note in notes.ToList())
-                {
-                    blockType = (int)note.Tag;
-
-                    // 노트가 타겟 바에 있고, 패널 끝에 가까워졌을 때
-                    if (note.Parent == targetBar && note.Bottom >= this.ClientSize.Height - 10 && note.Top <= this.ClientSize.Height)
-                    {
-                        if (blockType > 1)
-                        {
-                            if (curTime - startTime <= targetTime * blockType)
-                            {
-                                label2.Text = "Holding..."; // 긴 노트의 경우
-                                label2.ForeColor = Color.Orange;
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
-                            double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
-
-                            if (difference < 100)
-                            {
-                                hitStatus[targetBar] = true;
-                                perfectCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 1.0;
-                                label2.Text = "Perfect!"; // Perfect 판정
-                                label2.ForeColor = Color.Green;
-                                customForm.SaveListBoxItems();
-                            }
-                            else if (difference < 200)
-                            {
-                                hitStatus[targetBar] = true;
-                                goodCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 0.5;
-                                label2.Text = "Good!"; // Good 판정
-                                label2.ForeColor = Color.Blue;
-                                customForm.SaveListBoxItems();
-                            }
-                            else
-                            {
-                                badCount++;
-                                combo = 0;
-                                label2.Text = "Bad!"; // Bad 판정
-                                label2.ForeColor = Color.Red;
-                            }
-
-                            label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
-
-                            notes.Remove(note); // 리스트에서 노트 제거
-                            note.Dispose(); // 노트 자원 해제
-                            break;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                foreach (Panel note in notes.ToList())
-                {
-                    // 노트가 타겟 바에 있고, 패널 끝에 가까워졌을 때
-                    if (note.Parent == targetBar && note.Bottom >= this.ClientSize.Height - 10 && note.Top <= this.ClientSize.Height)
-                    {
-                        double noteTime = curTime - ((this.ClientSize.Height - note.Bottom) / 5.0) * (targetTime / 200.0); // 노트 하단이 패널 끝을 통과할 때의 시간 계산
-                        double difference = Math.Abs(curTime - noteTime); // 현재 시간과 노트 통과 시간의 차이 계산
-
-                        if (difference < 100)
-                        {
-                            if (!hitStatus[targetBar])
-                            {
-                                perfectCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 1.0;
-                                label2.Text = "Perfect!"; // Perfect 판정
-                                label2.ForeColor = Color.Green;
-                                
-                            }
-                        }
-                        else if (difference < 200)
-                        {
-                            if (!hitStatus[targetBar])
-                            {
-                                goodCount++;
-                                combo++;
-                                if (combo > maxcombo) maxcombo = combo;
-                                totalScore += 0.5;
-                                label2.Text = "Good!"; // Good 판정
-                                label2.ForeColor = Color.Blue;
-                            }
-                        }
-                        else
-                        {
-                            badCount++;
-                            combo = 0;
-                            label2.Text = "Bad!"; // Bad 판정
-                            label2.ForeColor = Color.Red;
-                        }
-
-                        label1.Text = "Combo: " + combo + "\nScore: " + totalScore + "\nMax Combo: " + maxcombo; // 콤보와 점수 업데이트
-                        notes.Remove(note); // 리스트에서 노트 제거
-                        note.Dispose(); // 노트 자원 해제
-                        break;
-                    }
-                }
-                hitStatus[targetBar] = false; // 다음 노트를 위해 hit 상태 초기화
-            }
-        }
         private void Media_PlayStateChange(int NewState)
         {
             // 음악 재생 종료시
@@ -665,7 +618,7 @@ namespace oss_rythm
 
                 // Calculate the rank of the current user
                 int rank = scoreList.FindIndex(row => row.Field<string>("Username") == username) + 1;
-                ScoreBoard = new ScoreBoard(this, totalScore, maxcombo, username, rank,title,bpm);
+                ScoreBoard = new ScoreBoard(this, totalScore, maxcombo, username, rank, title, bpm);
                 ScoreBoard.Show();
                 this.Close();
             }
