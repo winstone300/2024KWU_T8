@@ -54,19 +54,23 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.folderBrowserDialog2 = new System.Windows.Forms.FolderBrowserDialog();
             this.SetBlock = new System.Windows.Forms.Button();
             this.SetSpeed = new System.Windows.Forms.Button();
+            this.spdValue = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.diffValue = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(679, 31);
+            this.btnLoad.Location = new System.Drawing.Point(970, 46);
+            this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(87, 23);
+            this.btnLoad.Size = new System.Drawing.Size(124, 34);
             this.btnLoad.TabIndex = 3;
             this.btnLoad.Text = "불러오기";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -79,10 +83,9 @@
             // btnPlay
             // 
             this.btnPlay.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.btnPlay.Location = new System.Drawing.Point(689, 385);
-            this.btnPlay.Margin = new System.Windows.Forms.Padding(2);
+            this.btnPlay.Location = new System.Drawing.Point(975, 578);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(225, 45);
+            this.btnPlay.Size = new System.Drawing.Size(642, 68);
             this.btnPlay.TabIndex = 4;
             this.btnPlay.Text = "PLAY";
             this.btnPlay.UseVisualStyleBackColor = true;
@@ -91,10 +94,9 @@
             // btnBack
             // 
             this.btnBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.btnBack.Location = new System.Drawing.Point(28, 25);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBack.Location = new System.Drawing.Point(40, 38);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(74, 29);
+            this.btnBack.Size = new System.Drawing.Size(106, 44);
             this.btnBack.TabIndex = 5;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
@@ -102,6 +104,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.diffValue);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.spdValue);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.RealBmp);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.lblBpmInfo);
@@ -111,11 +117,9 @@
             this.groupBox1.Controls.Add(this.labelScore);
             this.groupBox1.Controls.Add(this.labelTitle);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.groupBox1.Location = new System.Drawing.Point(28, 265);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(40, 398);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(604, 165);
+            this.groupBox1.Size = new System.Drawing.Size(863, 248);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "INFO";
@@ -124,21 +128,19 @@
             // 
             this.RealBmp.AutoSize = true;
             this.RealBmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RealBmp.Location = new System.Drawing.Point(498, 109);
-            this.RealBmp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RealBmp.Location = new System.Drawing.Point(592, 164);
             this.RealBmp.Name = "RealBmp";
-            this.RealBmp.Size = new System.Drawing.Size(16, 17);
+            this.RealBmp.Size = new System.Drawing.Size(23, 25);
             this.RealBmp.TabIndex = 7;
             this.RealBmp.Text = "0";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(410, 109);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(462, 164);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 17);
+            this.label1.Size = new System.Drawing.Size(119, 25);
             this.label1.TabIndex = 6;
             this.label1.Text = "REAL BMP";
             // 
@@ -146,21 +148,19 @@
             // 
             this.lblBpmInfo.AutoSize = true;
             this.lblBpmInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBpmInfo.Location = new System.Drawing.Point(358, 109);
-            this.lblBpmInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblBpmInfo.Location = new System.Drawing.Point(387, 164);
             this.lblBpmInfo.Name = "lblBpmInfo";
-            this.lblBpmInfo.Size = new System.Drawing.Size(16, 17);
+            this.lblBpmInfo.Size = new System.Drawing.Size(23, 25);
             this.lblBpmInfo.TabIndex = 5;
             this.lblBpmInfo.Text = "0";
             // 
             // labelBpm
             // 
             this.labelBpm.AutoSize = true;
-            this.labelBpm.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBpm.Location = new System.Drawing.Point(284, 109);
-            this.labelBpm.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelBpm.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelBpm.Location = new System.Drawing.Point(282, 164);
             this.labelBpm.Name = "labelBpm";
-            this.labelBpm.Size = new System.Drawing.Size(37, 17);
+            this.labelBpm.Size = new System.Drawing.Size(58, 25);
             this.labelBpm.TabIndex = 4;
             this.labelBpm.Text = "BPM";
             // 
@@ -168,10 +168,9 @@
             // 
             this.lblScoreInfo.AutoSize = true;
             this.lblScoreInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScoreInfo.Location = new System.Drawing.Point(111, 109);
-            this.lblScoreInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblScoreInfo.Location = new System.Drawing.Point(159, 164);
             this.lblScoreInfo.Name = "lblScoreInfo";
-            this.lblScoreInfo.Size = new System.Drawing.Size(16, 17);
+            this.lblScoreInfo.Size = new System.Drawing.Size(23, 25);
             this.lblScoreInfo.TabIndex = 3;
             this.lblScoreInfo.Text = "0";
             // 
@@ -179,42 +178,39 @@
             // 
             this.lblTitleInfo.AutoSize = true;
             this.lblTitleInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitleInfo.Location = new System.Drawing.Point(111, 50);
-            this.lblTitleInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTitleInfo.Location = new System.Drawing.Point(159, 75);
             this.lblTitleInfo.Name = "lblTitleInfo";
-            this.lblTitleInfo.Size = new System.Drawing.Size(16, 17);
+            this.lblTitleInfo.Size = new System.Drawing.Size(23, 25);
             this.lblTitleInfo.TabIndex = 2;
             this.lblTitleInfo.Text = "0";
             // 
             // labelScore
             // 
             this.labelScore.AutoSize = true;
-            this.labelScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelScore.Location = new System.Drawing.Point(32, 109);
-            this.labelScore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelScore.Location = new System.Drawing.Point(46, 164);
             this.labelScore.Name = "labelScore";
-            this.labelScore.Size = new System.Drawing.Size(45, 17);
+            this.labelScore.Size = new System.Drawing.Size(69, 25);
             this.labelScore.TabIndex = 1;
             this.labelScore.Text = "Score";
             // 
             // labelTitle
             // 
             this.labelTitle.AutoSize = true;
-            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTitle.Location = new System.Drawing.Point(32, 50);
-            this.labelTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTitle.Location = new System.Drawing.Point(46, 75);
             this.labelTitle.Name = "labelTitle";
-            this.labelTitle.Size = new System.Drawing.Size(39, 17);
+            this.labelTitle.Size = new System.Drawing.Size(60, 25);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Title ";
             // 
             // btnHard
             // 
             this.btnHard.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.btnHard.Location = new System.Drawing.Point(442, 174);
-            this.btnHard.Margin = new System.Windows.Forms.Padding(2);
+            this.btnHard.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.btnHard.Location = new System.Drawing.Point(631, 261);
             this.btnHard.Name = "btnHard";
-            this.btnHard.Size = new System.Drawing.Size(190, 54);
+            this.btnHard.Size = new System.Drawing.Size(271, 81);
             this.btnHard.TabIndex = 11;
             this.btnHard.Text = "HARD";
             this.btnHard.UseVisualStyleBackColor = true;
@@ -223,10 +219,10 @@
             // btnNormal
             // 
             this.btnNormal.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.btnNormal.Location = new System.Drawing.Point(242, 174);
-            this.btnNormal.Margin = new System.Windows.Forms.Padding(2);
+            this.btnNormal.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.btnNormal.Location = new System.Drawing.Point(334, 261);
             this.btnNormal.Name = "btnNormal";
-            this.btnNormal.Size = new System.Drawing.Size(190, 54);
+            this.btnNormal.Size = new System.Drawing.Size(271, 81);
             this.btnNormal.TabIndex = 10;
             this.btnNormal.Text = "NORMAL";
             this.btnNormal.UseVisualStyleBackColor = true;
@@ -235,10 +231,10 @@
             // btnEasy
             // 
             this.btnEasy.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEasy.Location = new System.Drawing.Point(29, 174);
-            this.btnEasy.Margin = new System.Windows.Forms.Padding(2);
+            this.btnEasy.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.btnEasy.Location = new System.Drawing.Point(41, 261);
             this.btnEasy.Name = "btnEasy";
-            this.btnEasy.Size = new System.Drawing.Size(190, 54);
+            this.btnEasy.Size = new System.Drawing.Size(271, 81);
             this.btnEasy.TabIndex = 9;
             this.btnEasy.Text = "EASY";
             this.btnEasy.UseVisualStyleBackColor = true;
@@ -246,30 +242,29 @@
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(679, 82);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Location = new System.Drawing.Point(970, 123);
+            this.webBrowser1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(29, 30);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(250, 250);
+            this.webBrowser1.Size = new System.Drawing.Size(357, 375);
             this.webBrowser1.TabIndex = 12;
             this.webBrowser1.Visible = false;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(679, 297);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
+            this.progressBar1.Location = new System.Drawing.Point(970, 446);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(250, 35);
+            this.progressBar1.Size = new System.Drawing.Size(647, 52);
             this.progressBar1.TabIndex = 13;
             // 
             // BpmLoding
             // 
             this.BpmLoding.AutoSize = true;
-            this.BpmLoding.Location = new System.Drawing.Point(679, 337);
-            this.BpmLoding.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.BpmLoding.Location = new System.Drawing.Point(970, 506);
             this.BpmLoding.Name = "BpmLoding";
-            this.BpmLoding.Size = new System.Drawing.Size(9, 12);
+            this.BpmLoding.Size = new System.Drawing.Size(14, 18);
             this.BpmLoding.TabIndex = 14;
             this.BpmLoding.Text = ".";
             // 
@@ -278,19 +273,18 @@
             this.labelSelect.AutoSize = true;
             this.labelSelect.BackColor = System.Drawing.Color.White;
             this.labelSelect.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.labelSelect.Location = new System.Drawing.Point(679, 65);
-            this.labelSelect.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelSelect.Location = new System.Drawing.Point(970, 98);
             this.labelSelect.Name = "labelSelect";
-            this.labelSelect.Size = new System.Drawing.Size(250, 15);
+            this.labelSelect.Size = new System.Drawing.Size(649, 25);
             this.labelSelect.TabIndex = 16;
-            this.labelSelect.Text = "------------------Select Music----------------";
+            this.labelSelect.Text = "----------------------------------- Select Music --------------------------------" +
+    "-------";
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(840, 31);
-            this.btnDelete.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDelete.Location = new System.Drawing.Point(1490, 38);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(89, 23);
+            this.btnDelete.Size = new System.Drawing.Size(127, 34);
             this.btnDelete.TabIndex = 17;
             this.btnDelete.Text = "아이템 삭제";
             this.btnDelete.UseVisualStyleBackColor = true;
@@ -302,13 +296,11 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
+            this.columnHeader4});
             this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(679, 82);
-            this.listView1.Margin = new System.Windows.Forms.Padding(2);
+            this.listView1.Location = new System.Drawing.Point(970, 123);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(251, 219);
+            this.listView1.Size = new System.Drawing.Size(649, 326);
             this.listView1.TabIndex = 18;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -316,30 +308,29 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "파일명";
+            this.columnHeader1.Width = 211;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "BPM";
+            this.columnHeader2.Width = 99;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "점수";
+            this.columnHeader3.Width = 88;
             // 
             // columnHeader4
             // 
-            this.columnHeader4.Text = "콤보";
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "난이도";
+            this.columnHeader4.Text = "랭킹";
+            this.columnHeader4.Width = 105;
             // 
             // SetBlock
             // 
             this.SetBlock.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SetBlock.Location = new System.Drawing.Point(29, 96);
-            this.SetBlock.Margin = new System.Windows.Forms.Padding(2);
+            this.SetBlock.Location = new System.Drawing.Point(142, 160);
             this.SetBlock.Name = "SetBlock";
-            this.SetBlock.Size = new System.Drawing.Size(190, 54);
+            this.SetBlock.Size = new System.Drawing.Size(271, 81);
             this.SetBlock.TabIndex = 22;
             this.SetBlock.Text = "BLOCK";
             this.SetBlock.UseVisualStyleBackColor = true;
@@ -348,22 +339,61 @@
             // SetSpeed
             // 
             this.SetSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SetSpeed.Location = new System.Drawing.Point(192, 96);
-            this.SetSpeed.Margin = new System.Windows.Forms.Padding(2);
+            this.SetSpeed.Location = new System.Drawing.Point(526, 160);
             this.SetSpeed.Name = "SetSpeed";
-            this.SetSpeed.Size = new System.Drawing.Size(190, 54);
+            this.SetSpeed.Size = new System.Drawing.Size(271, 81);
             this.SetSpeed.TabIndex = 23;
-            this.SetSpeed.Text = "/     SPEED";
+            this.SetSpeed.Text = "SPEED";
             this.SetSpeed.UseVisualStyleBackColor = true;
             this.SetSpeed.Click += new System.EventHandler(this.SetSpeed_Click);
             // 
+            // spdValue
+            // 
+            this.spdValue.AutoSize = true;
+            this.spdValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.spdValue.Location = new System.Drawing.Point(778, 164);
+            this.spdValue.Name = "spdValue";
+            this.spdValue.Size = new System.Drawing.Size(39, 25);
+            this.spdValue.TabIndex = 9;
+            this.spdValue.Text = "1.0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(653, 164);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 25);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "SPEED";
+            // 
+            // diffValue
+            // 
+            this.diffValue.AutoSize = true;
+            this.diffValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.diffValue.Location = new System.Drawing.Point(778, 75);
+            this.diffValue.Name = "diffValue";
+            this.diffValue.Size = new System.Drawing.Size(74, 25);
+            this.diffValue.TabIndex = 11;
+            this.diffValue.Text = "Normal";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(621, 75);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(136, 25);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "DIFFICULTY";
+            // 
             // Custom
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::oss_rythm.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(977, 460);
+            this.ClientSize = new System.Drawing.Size(1690, 690);
             this.Controls.Add(this.SetSpeed);
             this.Controls.Add(this.SetBlock);
             this.Controls.Add(this.listView1);
@@ -379,7 +409,6 @@
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnPlay);
             this.Controls.Add(this.btnLoad);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Custom";
             this.Text = "Custom";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Custom_FormClosed);
@@ -417,12 +446,15 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Label RealBmp;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog2;
         private System.Windows.Forms.Button SetBlock;
         private System.Windows.Forms.Button SetSpeed;
+        private System.Windows.Forms.Label diffValue;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label spdValue;
+        private System.Windows.Forms.Label label3;
     }
 }

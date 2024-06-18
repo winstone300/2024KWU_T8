@@ -82,7 +82,7 @@ namespace oss_rythm
             this.parent = parent ?? throw new ArgumentNullException(nameof(parent), "Parent form cannot be null");
             btnList = new List<System.Windows.Forms.Button>()
             {
-                btnEasy, btnNormal, btnHard, btnBack, btnLoad, btnDelete
+                btnEasy, btnNormal, btnHard, btnBack, btnLoad, btnDelete , SetBlock , SetSpeed
             };
             btn_UI(); // 버튼 UI 설정
             progressBar1.Value = 0; // 진행률 초기화
@@ -197,6 +197,8 @@ namespace oss_rythm
                 _media.URL = (string)foundRows[0]["path"];
                 _media.controls.stop();
                 BpmLoding.Text = "BPM 추출 완료";
+                progressBar1.Value = 100;
+                progressPercentage = 100;
                 /*
                 if (musicFiles.ContainsKey(titleOnly))
                 {
@@ -312,7 +314,7 @@ namespace oss_rythm
                 btn.FlatAppearance.BorderSize = 1;
                 btn.FlatAppearance.MouseOverBackColor = Color.Transparent;
                 btn.FlatAppearance.MouseDownBackColor = Color.Transparent;
-                btn.BackColor = Color.Transparent;
+                btn.BackColor = Color.FromArgb(128, Color.White) ;
                 btn.MouseEnter += Button_MouseEnter;
                 btn.MouseLeave += Button_MouseLeave;
             }
@@ -535,10 +537,12 @@ namespace oss_rythm
                     selectedItem.SubItems[4].Text = difficulty;
                 }
             }
+            /*
             else
             {
                 MessageBox.Show("난이도를 설정할 항목을 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            */
         }
         // 점수 업데이트 ++ 06-17
         public void UpdateTotalScore(double totalScore)
@@ -584,13 +588,17 @@ namespace oss_rythm
         // 버튼 마우스 오버 이벤트 핸들러
         private void Button_MouseEnter(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.Hand;
+            System.Windows.Forms.Button btn = sender as System.Windows.Forms.Button;
+            btn.Cursor = Cursors.Hand;
+            btn.BackColor = Color.GreenYellow;
         }
 
         // 버튼 마우스 리브 이벤트 핸들러
         private void Button_MouseLeave(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.Default;
+            System.Windows.Forms.Button btn = sender as System.Windows.Forms.Button;
+            btn.Cursor = Cursors.Default;
+            btn.BackColor = Color.FromArgb(128, Color.White);
         }
 
         // Easy 버튼 클릭 이벤트 핸들러
@@ -600,11 +608,13 @@ namespace oss_rythm
             {
                 mode = 0;
                 UpdateDifficulty("Easy");
+                diffValue.Text = "Easy";
             }   
             else        // 속도조절
             {
                 speed = 1.0;
                 if (bpm != 0.0) RealBmp.Text = bpm.ToString();
+                spdValue.Text = "1.0";
             }
         }
 
@@ -615,11 +625,13 @@ namespace oss_rythm
             {
                 mode = 1;
                 UpdateDifficulty("Normal");
+                diffValue.Text = "Normal";
             }
             else
             {
                 speed = 1.5;
                 if (bpm != 0.0) RealBmp.Text = (bpm * 1.5).ToString();
+                spdValue.Text = "1.5";
             }
         }
 
@@ -630,11 +642,13 @@ namespace oss_rythm
             {
                 mode = 2;
                 UpdateDifficulty("Hard");
+                diffValue.Text = "Hard";
             }
             else
             {
                 speed = 2.0;
                 if (bpm != 0.0) RealBmp.Text = (bpm * 2.0).ToString();
+                spdValue.Text = "2.0";
             }
         }
 
