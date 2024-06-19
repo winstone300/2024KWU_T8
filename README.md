@@ -1,4 +1,4 @@
-# oss_rythm Project
+![image](https://github.com/winstone300/2024KWU_T8/assets/77767753/c0d4dd04-453b-427b-a0a3-49fd8e7adac3)# oss_rythm Project
 
 광운대학교 소프트웨어학부 응용소프트웨어실습 8조
 
@@ -32,6 +32,11 @@ oss_rythm Project는 C&#35; Windows Forms를 이용하여 제작한 리듬게임
  (1) 먼저 main branch에서 oss_rythm 폴더 >> oss_rythm 폴더 >> bin/Debug 폴더를 차례대로 들어갑니다.
 
  (2) 다음으로 oss_rythm.exe 파일을 찾았다면 다운로드 받고 실행합니다.
+
+ (3) 설치 후, Form1.resx파일을 찾아, 마우스 오른쪽 클릭 후 속성을 클릭합니다.
+
+ (4) 하단에 보안 : 이 파일은 다른 컴퓨터로부터 왔으며 사용자의 컴퓨터를 보호하기 위해 차단되었을 수도 있습니다. 의 차단 해제 체크박스를 해제해주세요!
+ 
 
 <br>
 
