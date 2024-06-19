@@ -1,4 +1,3 @@
-![image](https://github.com/winstone300/2024KWU_T8/assets/77767753/c0d4dd04-453b-427b-a0a3-49fd8e7adac3)# oss_rythm Project
 
 광운대학교 소프트웨어학부 응용소프트웨어실습 8조
 
