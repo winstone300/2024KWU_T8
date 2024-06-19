@@ -35,7 +35,9 @@ oss_rythm Project는 C&#35; Windows Forms를 이용하여 제작한 리듬게임
  (3) 설치 후, Form1.resx파일을 찾아, 마우스 오른쪽 클릭 후 속성을 클릭합니다.
 
  (4) 하단에 보안 : 이 파일은 다른 컴퓨터로부터 왔으며 사용자의 컴퓨터를 보호하기 위해 차단되었을 수도 있습니다. 의 차단 해제 체크박스를 해제해주세요!
- 
+
+ ![image](https://github.com/winstone300/2024KWU_T8/assets/77767753/c97fd1b6-9672-4df0-bb31-c5667b2862ea)
+
 
 <br>
 
